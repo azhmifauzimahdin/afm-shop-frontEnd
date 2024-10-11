@@ -1,5 +1,5 @@
-import { AxiosResponse } from "axios";
-import { LoginRequest, LoginResponse } from "../types/login";
+import axios, { AxiosResponse } from "axios";
+import { getLoginGoogle, LoginRequest, LoginResponse } from "../types/login";
 import httpRequest from "./api";
 import {
   CreateAccountRequest,
@@ -71,4 +71,24 @@ export const resetPassword = async (
   request: ResetPasswordRequest
 ): Promise<AxiosResponse<LoginResponse>> => {
   return await httpRequest.post("/forget-password/reset-password", request);
+};
+
+export const loginGoogle = async (
+  request: getLoginGoogle
+): Promise<AxiosResponse<LoginResponse>> => {
+  return await httpRequest.post("/login-google", request);
+};
+
+export const userGoogle = async (
+  token: string
+): Promise<AxiosResponse<getLoginGoogle>> => {
+  return await axios.get(
+    `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${token}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+      },
+    }
+  );
 };

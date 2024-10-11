@@ -7,6 +7,8 @@ import * as Yup from "yup";
 import { authService } from "../../../../services";
 import { LoginRequest } from "../../../../types/login";
 import { useSelector } from "react-redux";
+import { useGoogleLogin } from "@react-oauth/google";
+import { logoGoogle } from "../../../../assets/Index";
 
 interface FormValues {
   email: string;
@@ -58,6 +60,27 @@ const Login: FC = () => {
     },
     validationSchema,
     onSubmit: handleSubmit,
+  });
+
+  const login = useGoogleLogin({
+    onSuccess: async (codeResponse) => {
+      try {
+        setLoading(true);
+        const response = await authService.userGoogle(
+          codeResponse.access_token
+        );
+        const responseLogin = await authService.loginGoogle(response.data);
+        localStorage.setItem(
+          "ACCESS_TOKEN",
+          responseLogin.data.data.authorization.token
+        );
+        setLoading(false);
+        navigate("/");
+      } catch (error: any) {
+        setErrorMessage(error.response.data.data.errors);
+      }
+    },
+    onError: (error) => console.log("Login Failed:", error),
   });
 
   return (
@@ -122,6 +145,17 @@ const Login: FC = () => {
           </div>
         </div>
       </form>
+      <div className="text-slate-500 text-center text-sm my-3">Atau</div>
+      <div className="flex justify-center">
+        <Button type="button" color="outline-primary" onClick={() => login()}>
+          <img
+            src={logoGoogle}
+            className="inline w-5 mr-2 group-hover:scale-125 transition-all duration-500"
+            alt="Google"
+          />
+          <span className="font-medium text-sm">Google</span>
+        </Button>
+      </div>
     </>
   );
 };

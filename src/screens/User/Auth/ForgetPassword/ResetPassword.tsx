@@ -15,7 +15,7 @@ interface FormValues {
 }
 
 const ResetPassword: FC = () => {
-  DocumentTitle("Registrasi");
+  DocumentTitle("Reset kata sandi");
   const me = useSelector((state: any) => state.me.me);
   const [loading, setLoading] = useState(false);
   const [render, setRender] = useState(false);

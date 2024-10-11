@@ -3,8 +3,8 @@ import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { LogoFull } from "../../assets/Index";
 import { userService } from "../../services";
 import { useDispatch } from "react-redux";
-import { updateMe } from "../../redux/actions/me";
-import { LoadingScreen } from "../../components";
+import { deleteMe, updateMe } from "../../redux/actions/me";
+import { Button, LoadingScreen } from "../../components";
 
 const AuthLayout: FC = () => {
   const location = useLocation();
@@ -24,6 +24,11 @@ const AuthLayout: FC = () => {
         setRender(true);
       });
   }, [dispatch, navigate]);
+
+  const handleRedirectLogin = () => {
+    dispatch(deleteMe());
+    navigate("/login");
+  };
 
   if (!render) {
     return <LoadingScreen />;
@@ -48,9 +53,9 @@ const AuthLayout: FC = () => {
           ) : (
             <>
               Sudah punya akun?
-              <Link to="/login" className="ms-1 text-orange">
+              <Button type="button" color="link" onClick={handleRedirectLogin}>
                 Login
-              </Link>
+              </Button>
             </>
           )}
         </div>

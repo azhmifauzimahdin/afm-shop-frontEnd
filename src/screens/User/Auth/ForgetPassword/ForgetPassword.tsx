@@ -15,7 +15,7 @@ interface FormValues {
 }
 
 const ForgetPassword: FC = () => {
-  DocumentTitle("Registrasi");
+  DocumentTitle("Lupa kata sandi");
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();

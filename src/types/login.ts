@@ -21,3 +21,13 @@ export interface token {
   token: string;
   type: string;
 }
+
+export interface getLoginGoogle {
+  email: string;
+  family_name: string;
+  given_name: string;
+  id: string;
+  name: string;
+  picture: string;
+  verified_email: boolean;
+}

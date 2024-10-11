@@ -16,7 +16,7 @@ interface FormValues {
 }
 
 const CreateAccount: FC = () => {
-  DocumentTitle("Registrasi");
+  DocumentTitle("Buat Akun");
   const me = useSelector((state: any) => state.me.me);
   const [loading, setLoading] = useState(false);
   const [render, setRender] = useState(false);

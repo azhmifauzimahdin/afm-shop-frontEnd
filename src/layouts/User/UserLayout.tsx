@@ -25,6 +25,7 @@ const UserLayout: FC = () => {
 
   const handleLogout = async () => {
     try {
+      setRender(false);
       await authService.logout();
       localStorage.removeItem("ACCESS_TOKEN");
       navigate("/login");

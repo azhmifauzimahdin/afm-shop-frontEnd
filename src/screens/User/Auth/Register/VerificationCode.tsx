@@ -5,8 +5,10 @@ import { Alert, Button, LoadingScreen } from "../../../../components";
 import { authService } from "../../../../services";
 import { useNavigate } from "react-router-dom";
 import { updateMe } from "../../../../redux/actions/me";
+import { DocumentTitle } from "../../../../layouts";
 
 const VerificationCode: FC = () => {
+  DocumentTitle("Verikasi kode");
   const me = useSelector((state: any) => state.me.me);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
