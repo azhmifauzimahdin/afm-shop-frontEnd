@@ -3,15 +3,16 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 interface InputProps {
   label?: string;
-  type: "text" | "password" | "email";
+  type: "text" | "password" | "email" | "date" | "radio";
   id: string;
   name: string;
   placeholder?: string;
   disabled?: boolean;
-  value?: string;
+  value?: any;
   defaultValue?: string;
   onChange?: (e: React.FormEvent<HTMLInputElement>) => void;
   errorMessage?: any;
+  checked?: boolean | undefined;
 }
 
 const Input: FC<InputProps> = (props) => {
@@ -25,6 +26,7 @@ const Input: FC<InputProps> = (props) => {
     value,
     onChange,
     errorMessage,
+    checked,
   } = props;
 
   const [showPassword, setShowPassword] = useState(false);
@@ -34,11 +36,17 @@ const Input: FC<InputProps> = (props) => {
   };
 
   return (
-    <div>
-      <label htmlFor={id} className="block mb-2 font-medium">
-        {label}
-      </label>
-      <div className="relative">
+    <div className={`${type === "radio" && "flex item"}`}>
+      {type !== "radio" && (
+        <label htmlFor={id} className="block mb-2 font-medium">
+          {label}
+        </label>
+      )}
+      <div
+        className={`relative ${
+          type === "radio" && "flex flex-row justify-center"
+        }`}
+      >
         <input
           type={
             type === "password" ? (showPassword ? "text" : "password") : type
@@ -46,12 +54,13 @@ const Input: FC<InputProps> = (props) => {
           id={id}
           name={name}
           value={value}
-          className={`bg-gray-50 border rounded-lg border-gray-300rounded-lg focus:border-orange outline-none block w-full p-2.5 ${
-            type === "password" && "pe-10"
-          }`}
+          className={`bg-gray-50 border rounded-lg border-gray-300rounded-lg focus:border-orange outline-none p-2.5 ${
+            type !== "radio" && "w-full"
+          } ${type === "password" && "pe-10"}`}
           placeholder={placeholder}
           disabled={disabled}
           onChange={onChange}
+          defaultChecked={checked}
         />
         {type === "password" && (
           <div
@@ -62,6 +71,11 @@ const Input: FC<InputProps> = (props) => {
           </div>
         )}
       </div>
+      {type === "radio" && (
+        <label htmlFor={id} className="ms-2">
+          {label}
+        </label>
+      )}
       {errorMessage && (
         <div className="text-red-600 text-xs ml-3 mt-1">{errorMessage}</div>
       )}

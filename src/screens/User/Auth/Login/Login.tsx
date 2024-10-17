@@ -1,14 +1,14 @@
 import { FC, useState } from "react";
 import { DocumentTitle } from "../../../../layouts";
-import { Alert, Button, Input } from "../../../../components";
-import { Link, useNavigate } from "react-router-dom";
+import { Alert, Button, Input, A } from "../../../../components";
+import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { authService } from "../../../../services";
 import { LoginRequest } from "../../../../types/login";
 import { useSelector } from "react-redux";
 import { useGoogleLogin } from "@react-oauth/google";
-import { logoGoogle } from "../../../../assets/Index";
+import { logoGoogle } from "../../../../assets/index";
 
 interface FormValues {
   email: string;
@@ -18,13 +18,13 @@ interface FormValues {
 const Login: FC = () => {
   DocumentTitle("Login");
   const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage]: any[] = useState([]);
   const navigate = useNavigate();
   const me = useSelector((state: any) => state.me.me);
 
   const handleSubmitForm = (e: any) => {
     e.preventDefault();
-    setErrorMessage("");
+    setErrorMessage([]);
     formik.handleSubmit();
   };
 
@@ -47,7 +47,15 @@ const Login: FC = () => {
       setLoading(false);
       navigate("/");
     } catch (error: any) {
-      setErrorMessage(error.response.data.data.errors);
+      setErrorMessage([error.response.data.data?.errors]);
+      setErrorMessage((errorMessage: any) => [
+        ...errorMessage,
+        error.response.data.data?.email,
+      ]);
+      setErrorMessage((errorMessage: any) => [
+        ...errorMessage,
+        error.response.data.data?.password,
+      ]);
       setLoading(false);
       formik.resetForm();
     }
@@ -77,7 +85,7 @@ const Login: FC = () => {
         setLoading(false);
         navigate("/");
       } catch (error: any) {
-        setErrorMessage(error.response.data.data.errors);
+        setErrorMessage([error.response.data.data.errors]);
       }
     },
     onError: (error) => console.log("Login Failed:", error),
@@ -89,7 +97,7 @@ const Login: FC = () => {
       <p className="mb-3 text-slate-500 text-center">
         Silakan login dan mulai beberlanja
       </p>
-      <Alert type="danger" hidden={errorMessage ? false : true}>
+      <Alert type="danger" hidden={errorMessage.length > 0 ? false : true}>
         {errorMessage}
       </Alert>
       <form onSubmit={handleSubmitForm}>
@@ -126,11 +134,7 @@ const Login: FC = () => {
             }
           />
           <div className="flex justify-end">
-            <Link to={"/forget-password"}>
-              <Button type="button" color="link">
-                Lupa kata sandi?
-              </Button>
-            </Link>
+            <A to="/forget-password">Lupa kata sandi?</A>
           </div>
           <div className="mt-3">
             <Button

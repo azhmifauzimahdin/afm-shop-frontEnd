@@ -1,17 +1,26 @@
 import { FC } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import {
+  ChangePassword,
   CreateAccount,
+  Email,
   ForgetPassword,
+  Home,
   Login,
+  Profile,
   Register,
   ResetPassword,
   VerificationCode,
+  VerificationCodeChangeEmail,
   VerificationCodeForgetPassword,
 } from "./screens/User";
-import { AuthLayout, UserLayout } from "./layouts";
+import { AccoutLayout, AuthLayout, UserLayout } from "./layouts";
+import { useSelector } from "react-redux";
+import ProtectedRoute from "./ProtectedRoute";
 
 const Router: FC = () => {
+  const me = useSelector((state: any) => state.me.me);
+
   return (
     <BrowserRouter>
       <Routes>
@@ -30,7 +39,20 @@ const Router: FC = () => {
           />
           <Route path="/reset-password" element={<ResetPassword />} />
         </Route>
-        <Route path="/" element={<UserLayout />}></Route>
+        <Route element={<UserLayout />}>
+          <Route path="/" element={<Home />} />
+          <Route element={<ProtectedRoute isAuthenticated={me.email} />}>
+            <Route element={<AccoutLayout />}>
+              <Route path="/account/profile" element={<Profile />}/>
+              <Route path="/account/profile/email" element={<Email />}/>
+              <Route path="/account/change-password" element={<ChangePassword />} />
+            </Route>
+          </Route>
+        </Route>
+        <Route
+          path="/account/profile/verification-code"
+          element={<VerificationCodeChangeEmail />}
+        />
       </Routes>
     </BrowserRouter>
   );

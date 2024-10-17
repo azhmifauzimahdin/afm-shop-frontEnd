@@ -7,3 +7,17 @@ input::-webkit-inner-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
 }
+
+.section_title {
+  position: relative;
+}
+
+.section_title::before {
+  content: "";
+  background: url(./assets/svg/dots-bg.svg);
+  height: 2rem;
+  width: 2rem;
+  position: absolute;
+  left: -0.5rem;
+  top: -0.2rem;
+}

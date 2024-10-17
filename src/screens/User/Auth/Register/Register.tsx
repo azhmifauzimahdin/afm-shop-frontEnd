@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
 import { DocumentTitle } from "../../../../layouts";
-import { Button, Input, Modal } from "../../../../components";
+import { Alert, Button, Input, Modal } from "../../../../components";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -19,6 +19,7 @@ const Register: FC = () => {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [visible, setVisible] = useState(false);
+  const [hiddenAlert, setHiddenAlert] = useState(true);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -37,8 +38,15 @@ const Register: FC = () => {
       navigate("/register/verification-code");
     } catch (error: any) {
       dispatch(updateMe(values));
-      setVisible(true);
       setErrorMessage(error.response.data.data.email);
+      if (
+        error.response.data.data.email[0] !=
+        "Email harus berupa alamat email yang valid."
+      ) {
+        setVisible(true);
+      } else {
+        setHiddenAlert(false);
+      }
       setLoading(false);
     }
   };
@@ -54,6 +62,9 @@ const Register: FC = () => {
   return (
     <>
       <h1 className="text-center text-2xl font-bold mb-1">Register</h1>
+      <Alert type="danger" hidden={hiddenAlert}>
+        {errorMessage}
+      </Alert>
       <p className="mb-3 text-slate-500 text-center">
         Daftarkan diri anda dan mulai berbelanja
       </p>

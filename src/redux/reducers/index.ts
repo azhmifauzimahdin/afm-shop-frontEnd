@@ -1,7 +1,6 @@
 import { combineReducers } from "redux";
 
-import counter from "./counter";
-import todo from "./todo";
 import me from "./me";
+import user from "./user";
 
-export default combineReducers({ counter, todo, me });
+export default combineReducers({ me, user });

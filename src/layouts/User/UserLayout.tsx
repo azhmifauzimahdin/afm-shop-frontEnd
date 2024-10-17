@@ -1,39 +1,33 @@
 import { FC, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
 import { Outlet, useNavigate } from "react-router-dom";
-import { authService, userService } from "../../services";
+import { LoadingScreen, UserNavbar } from "../../components";
+import { useDispatch } from "react-redux";
+import { userService } from "../../services";
 import { deleteMe, updateMe } from "../../redux/actions/me";
-import { Button, LoadingScreen } from "../../components";
 
 const UserLayout: FC = () => {
-  const navigate = useNavigate();
+  const token = localStorage.getItem("ACCESS_TOKEN");
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [render, setRender] = useState(false);
 
   useEffect(() => {
-    userService
-      .me()
-      .then((response) => {
-        dispatch(updateMe(response.data.data.user));
-        setRender(true);
-      })
-      .catch(() => {
-        navigate("/login");
-        setRender(true);
-      });
-  }, [dispatch, navigate]);
-
-  const handleLogout = async () => {
-    try {
-      setRender(false);
-      await authService.logout();
-      localStorage.removeItem("ACCESS_TOKEN");
-      navigate("/login");
+    if (token) {
+      userService
+        .me()
+        .then((response) => {
+          dispatch(updateMe(response.data.data.user));
+          setRender(true);
+        })
+        .catch(() => {
+          setRender(true);
+          dispatch(deleteMe());
+        });
+    } else {
+      setRender(true);
       dispatch(deleteMe());
-    } catch (error) {
-      console.log(error);
     }
-  };
+  }, [dispatch, navigate, token]);
 
   if (!render) {
     return <LoadingScreen />;
@@ -41,11 +35,11 @@ const UserLayout: FC = () => {
 
   return (
     <>
-      <div className="container mx-auto min-h-screen flex justify-center items-center">
-        <Button color="link" type="button" onClick={handleLogout}>
-          Logout
-        </Button>
-        <Outlet />
+      <div className="min-h-screen">
+        <UserNavbar />
+        <div className="container mx-auto p-4">
+          <Outlet />
+        </div>
       </div>
     </>
   );

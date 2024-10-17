@@ -9,7 +9,7 @@ export default {
       colors: {
         "orange": "#FF4C61",
         "purple": "#6C6CFF"
-      }
+      },
     },
   },
   plugins: [],

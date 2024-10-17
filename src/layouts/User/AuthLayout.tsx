@@ -1,10 +1,10 @@
 import { FC, useEffect, useState } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
-import { LogoFull } from "../../assets/Index";
+import { LogoFull } from "../../assets";
 import { userService } from "../../services";
 import { useDispatch } from "react-redux";
 import { deleteMe, updateMe } from "../../redux/actions/me";
-import { Button, LoadingScreen } from "../../components";
+import { A, LoadingScreen } from "../../components";
 
 const AuthLayout: FC = () => {
   const location = useLocation();
@@ -25,11 +25,6 @@ const AuthLayout: FC = () => {
       });
   }, [dispatch, navigate]);
 
-  const handleRedirectLogin = () => {
-    dispatch(deleteMe());
-    navigate("/login");
-  };
-
   if (!render) {
     return <LoadingScreen />;
   }
@@ -46,16 +41,20 @@ const AuthLayout: FC = () => {
           {location.pathname === "/login" ? (
             <>
               Belum punya akun?
-              <Link to="/register" className="ms-1 text-orange">
+              <A to="/register" clasName="ms-1">
                 Daftar Sekarang
-              </Link>
+              </A>
             </>
           ) : (
             <>
               Sudah punya akun?
-              <Button type="button" color="link" onClick={handleRedirectLogin}>
+              <A
+                to="/login"
+                clasName="ms-1"
+                onClick={() => dispatch(deleteMe())}
+              >
                 Login
-              </Button>
+              </A>
             </>
           )}
         </div>

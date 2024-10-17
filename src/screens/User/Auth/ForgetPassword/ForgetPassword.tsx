@@ -35,7 +35,6 @@ const ForgetPassword: FC = () => {
       setLoading(false);
       navigate("/forget-password/verification-code");
     } catch (error: any) {
-      console.log(error);
       dispatch(updateMe(values));
       setErrorMessage(error.response.data.data.email);
       setLoading(false);

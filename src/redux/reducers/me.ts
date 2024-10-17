@@ -4,6 +4,7 @@ const initialState = {
     name: "",
     email: "",
     image: "",
+    gender: "",
     birthday: "",
   },
 };
@@ -26,6 +27,7 @@ const reducer = (
           id: "",
           name: "",
           email: "",
+          gender: "",
           image: "",
           birthday: "",
         },
