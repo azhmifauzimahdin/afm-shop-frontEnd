@@ -7,6 +7,7 @@ interface InputProps {
 
 const ProtectedRoute: FC<InputProps> = (props) => {
   const { isAuthenticated } = props;
+
   if (!isAuthenticated) {
     return <Navigate to="/" replace />;
   }

@@ -8,3 +8,4 @@ export { default as NavLink } from "./Link/NavLink";
 export { default as A } from "./Link/Link";
 export { default as UserNavbar } from "./Navbar/UserNavbar";
 export { default as UserSidebar } from "./Sidebar/UserSidebar";
+export { default as CardList } from "./Card/CardList";

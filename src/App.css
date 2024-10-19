@@ -21,3 +21,10 @@ input[type="number"] {
   left: -0.5rem;
   top: -0.2rem;
 }
+
+.card-title {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  text-overflow: ellipsis;
+}

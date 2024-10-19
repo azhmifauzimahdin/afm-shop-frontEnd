@@ -11,7 +11,7 @@ interface InputProps {
   disabled?: boolean;
   value?: string;
   defaultValue?: string;
-  onChange?: (e: React.FormEvent<HTMLInputElement>) => void;
+  onChange?: (e: any) => void;
   errorMessage?: any;
 }
 

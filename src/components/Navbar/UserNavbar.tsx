@@ -2,7 +2,7 @@ import { FC, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { defaultUser, LogoFull } from "../../assets";
 import { FaArrowLeft, FaBars } from "react-icons/fa";
-import { authService } from "../../services";
+import { authService, productService } from "../../services";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteMe } from "../../redux/actions/me";
 import { Button, InputGroup, NavLink, UserSidebar } from "../../components";
@@ -10,6 +10,7 @@ import { FaMagnifyingGlass, FaXmark } from "react-icons/fa6";
 import { CiLogout, CiShoppingCart, CiUser } from "react-icons/ci";
 import { GoCommentDiscussion } from "react-icons/go";
 import { PiShoppingBag } from "react-icons/pi";
+import { setProduct } from "../../redux/actions/product";
 
 const UserNavbar: FC = () => {
   const location = useLocation().pathname.split("/")[1];
@@ -18,6 +19,7 @@ const UserNavbar: FC = () => {
   const dispatch = useDispatch();
   const [toggle, setToggle] = useState(false);
   const [toggleMobile, setToggleMobile] = useState(false);
+  const [search, setSearch] = useState("");
 
   const handleLogout = async () => {
     setToggle(false);
@@ -30,25 +32,42 @@ const UserNavbar: FC = () => {
       console.log(error);
     }
   };
+
+  const handleSearch = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const response = await productService.getAll(search);
+      dispatch(setProduct(response.data.data.products));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="relative w-full h-full bg-white">
       <nav
         id="main-navbar"
         className="container mx-auto p-3 lg:px-5 flex items-center gap-6 md:gap-10 transition-all duration-500"
       >
-        <Link to="/" className="hidden sm:block">
+        <Link to="/" className="hidden sm:block w-full">
           <img src={LogoFull} alt="Logo AFM" className="h-8" />
         </Link>
-        <Link to="#" className={`sm:hidden ${!location && "hidden"}`}>
+        <button
+          onClick={() => navigate(-1)}
+          className={`sm:hidden ${!location && "hidden"}`}
+        >
           <FaArrowLeft />
-        </Link>
-        <InputGroup
-          type="search"
-          id="search"
-          name="search"
-          placeholder="Cari di AFM Shop"
-          prepend={<FaMagnifyingGlass className="text-lg text-slate-500" />}
-        />
+        </button>
+        <form onSubmit={handleSearch} className="w-full">
+          <InputGroup
+            type="search"
+            id="search"
+            name="search"
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Cari di AFM Shop"
+            prepend={<FaMagnifyingGlass className="text-lg text-slate-500" />}
+          />
+        </form>
         <div className="flex items-center gap-1 relative">
           <Link to="" className="p-2 rounded-lg hover:bg-slate-100 text-lg">
             <GoCommentDiscussion className="text-xl" />
