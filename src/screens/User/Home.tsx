@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect } from "react";
 import { DocumentTitle } from "../../layouts";
 import { CardList } from "../../components";
 import { productService } from "../../services";
@@ -9,7 +9,6 @@ const Home: FC = () => {
   DocumentTitle("Home");
   const products = useSelector((state: any) => state.products.products);
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     getAllProducts();
@@ -17,10 +16,8 @@ const Home: FC = () => {
 
   const getAllProducts = async () => {
     try {
-      setLoading(true);
       const response = await productService.getAll("");
       dispatch(setProduct(response.data.data.products));
-      setLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -28,7 +25,7 @@ const Home: FC = () => {
 
   return (
     <div>
-      <CardList data={products} loading={loading} />
+      <CardList data={products} />
     </div>
   );
 };

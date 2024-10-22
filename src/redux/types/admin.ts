@@ -1,0 +1,2 @@
+export const UPDATEADMIN = "UPDATEADMIN";
+export const DELETEADMIN = "DELETEADMIN";

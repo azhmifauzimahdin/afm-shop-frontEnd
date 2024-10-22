@@ -22,7 +22,6 @@ const UserNavbar: FC = () => {
   const [search, setSearch] = useState("");
 
   const handleLogout = async () => {
-    setToggle(false);
     try {
       await authService.logout();
       localStorage.removeItem("ACCESS_TOKEN");
@@ -83,10 +82,9 @@ const UserNavbar: FC = () => {
             <div className="my-2 border border-slate-400 mx-2"></div>
             {me.email ? (
               <div
-                onClick={() => setToggle(true)}
                 onMouseEnter={() => setToggle(true)}
                 onMouseLeave={() => setToggle(false)}
-                className="flex items-center gap-3 p-1 rounded-lg hover:bg-slate-100 cursor-pointer relative"
+                className="flex items-center gap-3 p-1 rounded-lg hover:bg-slate-100 cursor-pointer relative z-50"
               >
                 <div className="h-8 aspect-square rounded-full mx-auto overflow-hidden">
                   {me.image ? (
@@ -103,6 +101,7 @@ const UserNavbar: FC = () => {
                 <div
                   id="user-menu"
                   onMouseEnter={() => setToggle(true)}
+                  onClick={() => setToggle(false)}
                   className={`absolute top-10 right-0 bg-white rounded-lg shadow overflow-hidden transition-all duration-700 ${
                     !toggle ? "h-0" : "h-40"
                   }`}
@@ -138,7 +137,7 @@ const UserNavbar: FC = () => {
                         <CiShoppingCart className="text-lg" />
                         Pesanan Saya
                       </NavLink>
-                      <NavLink to="" onClick={handleLogout}>
+                      <NavLink onClick={handleLogout}>
                         <CiLogout className="text-lg" />
                         Logout
                       </NavLink>
@@ -194,7 +193,7 @@ const UserNavbar: FC = () => {
             <FaXmark className="text-xl text-slate-600" />
           </div>
         </div>
-        <div className="p-3">
+        <div className="p-3 z-50">
           <UserSidebar me={me} onClick={() => setToggleMobile(false)} />
         </div>
       </nav>

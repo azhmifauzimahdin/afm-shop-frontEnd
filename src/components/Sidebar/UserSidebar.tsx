@@ -10,7 +10,7 @@ import { CiLock, CiLogout, CiUser } from "react-icons/ci";
 
 interface InputProps {
   me: me;
-  onClick: React.MouseEventHandler<HTMLDivElement>;
+  onClick?: React.MouseEventHandler<HTMLDivElement>;
 }
 const UserSidebar: FC<InputProps> = (props) => {
   const { me, onClick } = props;

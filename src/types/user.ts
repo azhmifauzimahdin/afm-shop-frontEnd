@@ -15,7 +15,7 @@ export interface UserVerificationRequest {
   otp: number;
 }
 
-export interface ChangePasswordRequest{
+export interface ChangePasswordRequest {
   old_password: string;
   password: string;
   password_confirmation: string;
@@ -47,6 +47,7 @@ export interface User {
   email: string;
   image: string;
   birthday: string;
+  gender: string;
 }
 
 export interface me {

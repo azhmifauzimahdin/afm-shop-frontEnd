@@ -14,45 +14,99 @@ import {
   VerificationCodeChangeEmail,
   VerificationCodeForgetPassword,
 } from "./screens/User";
-import { AccoutLayout, AuthLayout, UserLayout } from "./layouts";
+import { AccoutLayout, AdminLayout, AuthLayout, UserLayout } from "./layouts";
 import { useSelector } from "react-redux";
-import ProtectedRoute from "./ProtectedRoute";
+import {
+  Admin,
+  AuthenticateAdmin,
+  AuthenticateUser,
+  RedirectIfAuthenticatedAdmin,
+  RedirectIfAuthenticatedUser,
+  User,
+} from "./ProtectedRoute";
+import { AdminLogin } from "./screens/Admin";
 
 const Router: FC = () => {
   const me = useSelector((state: any) => state.me.me);
+  const isAuthenticateUser = me.email;
+  const admin = useSelector((state: any) => state.admin.admin);
+  const isAuthenticateAdmin = admin.email;
 
   return (
     <BrowserRouter>
       <Routes>
-        <Route element={<AuthLayout />}>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+        <Route element={<User />}>
           <Route
-            path="/register/verification-code"
-            element={<VerificationCode />}
-          />
-          <Route path="/register/create-account" element={<CreateAccount />} />
-          <Route path="/forget-password" element={<ForgetPassword />} />
+            element={
+              <RedirectIfAuthenticatedUser
+                isAuthenticated={isAuthenticateUser}
+              />
+            }
+          >
+            <Route element={<AuthLayout />}>
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route
+                path="/register/verification-code"
+                element={<VerificationCode />}
+              />
+              <Route
+                path="/register/create-account"
+                element={<CreateAccount />}
+              />
+              <Route path="/forget-password" element={<ForgetPassword />} />
+              <Route
+                path="/forget-password/verification-code"
+                element={<VerificationCodeForgetPassword />}
+              />
+              <Route path="/reset-password" element={<ResetPassword />} />
+            </Route>
+          </Route>
+          <Route element={<UserLayout />}>
+            <Route path="/" element={<Home />} />
+            <Route
+              element={
+                <AuthenticateUser isAuthenticated={isAuthenticateUser} />
+              }
+            >
+              <Route element={<AccoutLayout />}>
+                <Route path="/account/profile" element={<Profile />} />
+                <Route path="/account/profile/email" element={<Email />} />
+                <Route
+                  path="/account/change-password"
+                  element={<ChangePassword />}
+                />
+              </Route>
+            </Route>
+          </Route>
           <Route
-            path="/forget-password/verification-code"
-            element={<VerificationCodeForgetPassword />}
+            path="/account/profile/verification-code"
+            element={<VerificationCodeChangeEmail />}
           />
-          <Route path="/reset-password" element={<ResetPassword />} />
         </Route>
-        <Route element={<UserLayout />}>
-          <Route path="/" element={<Home />} />
-          <Route element={<ProtectedRoute isAuthenticated={me.email} />}>
-            <Route element={<AccoutLayout />}>
-              <Route path="/account/profile" element={<Profile />}/>
-              <Route path="/account/profile/email" element={<Email />}/>
-              <Route path="/account/change-password" element={<ChangePassword />} />
+
+        <Route element={<Admin />}>
+          <Route
+            element={
+              <RedirectIfAuthenticatedAdmin
+                isAuthenticated={isAuthenticateAdmin}
+              />
+            }
+          >
+            <Route element={<AuthLayout />}>
+              <Route path="/admin/login" element={<AdminLogin />} />
+            </Route>
+          </Route>
+          <Route
+            element={
+              <AuthenticateAdmin isAuthenticated={isAuthenticateAdmin} />
+            }
+          >
+            <Route element={<AdminLayout />}>
+              <Route path="/admin/dashboard" element={<div>Dashboard</div>} />
             </Route>
           </Route>
         </Route>
-        <Route
-          path="/account/profile/verification-code"
-          element={<VerificationCodeChangeEmail />}
-        />
       </Routes>
     </BrowserRouter>
   );

@@ -54,7 +54,7 @@ const Input: FC<InputProps> = (props) => {
           id={id}
           name={name}
           value={value}
-          className={`bg-gray-50 border rounded-lg border-gray-300rounded-lg focus:border-orange outline-none p-2.5 ${
+          className={`temp bg-gray-50 rounded-lg border border-gray-300 p-2.5 ${
             type !== "radio" && "w-full"
           } ${type === "password" && "pe-10"}`}
           placeholder={placeholder}

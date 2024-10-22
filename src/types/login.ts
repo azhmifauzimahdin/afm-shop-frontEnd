@@ -1,3 +1,4 @@
+import { Admin } from "./admin";
 import { User } from "./user";
 
 export interface LoginRequest {
@@ -20,6 +21,17 @@ export interface LoginResponseData {
 export interface token {
   token: string;
   type: string;
+}
+export interface LoginAdminResponse {
+  code: number;
+  success: boolean;
+  message: string;
+  data: LoginAdminResponseData;
+}
+
+export interface LoginAdminResponseData {
+  authorization: token;
+  user: Admin;
 }
 
 export interface getLoginGoogle {
