@@ -1,3 +1,2 @@
 export const SETPRODUCT = "SETPRODUCT";
-export const ADDPRODUCT = "ADDPRODUCT";
-export const DELPRODUCT = "DELETEPRODUCT";
+export const DELPRODUCT = "DELPRODUCT";

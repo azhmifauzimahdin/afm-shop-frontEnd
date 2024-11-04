@@ -30,6 +30,7 @@ const reducer = (
           gender: "",
           image: "",
           birthday: "",
+          image_url: "",
         },
       };
     default:

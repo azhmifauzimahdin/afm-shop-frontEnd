@@ -4,10 +4,12 @@ import { CardList } from "../../components";
 import { productService } from "../../services";
 import { useDispatch, useSelector } from "react-redux";
 import { setProduct } from "../../redux/actions/product";
+import { setLoading } from "../../redux/actions/loading";
 
 const Home: FC = () => {
   DocumentTitle("Home");
   const products = useSelector((state: any) => state.products.products);
+  const loading = useSelector((state: any) => state.loading.loading);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -16,16 +18,19 @@ const Home: FC = () => {
 
   const getAllProducts = async () => {
     try {
-      const response = await productService.getAll("");
+      dispatch(setLoading(true));
+      const response = await productService.getAll();
       dispatch(setProduct(response.data.data.products));
+      dispatch(setLoading(false));
     } catch (error) {
+      dispatch(setLoading(false));
       console.log(error);
     }
   };
 
   return (
     <div>
-      <CardList data={products} />
+      <CardList data={products.data} loading={loading} />
     </div>
   );
 };

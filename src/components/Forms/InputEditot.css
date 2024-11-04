@@ -1,0 +1,14 @@
+.rsw-ce ol {
+  list-style-type: decimal !important;
+  margin-left: 1.6rem !important;
+}
+
+.rsw-ce ul {
+  list-style: disc !important;
+  margin-left: 1.6rem !important;
+}
+
+.rsw-editor {
+  --tw-border-opacity: 1;
+  /* border-color: #e5e7eb !important; */
+}

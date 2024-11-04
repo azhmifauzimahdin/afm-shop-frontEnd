@@ -28,7 +28,7 @@ const AuthLayout: FC = () => {
           ) : location.pathname === "/login" ? (
             <>
               Belum punya akun?
-              <A to="/register" clasName="ms-1">
+              <A to="/register" className="ms-1">
                 Daftar Sekarang
               </A>
             </>
@@ -37,7 +37,7 @@ const AuthLayout: FC = () => {
               Sudah punya akun?
               <A
                 to="/login"
-                clasName="ms-1"
+                className="ms-1"
                 onClick={() => dispatch(deleteMe())}
               >
                 Login

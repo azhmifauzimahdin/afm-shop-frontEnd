@@ -1,7 +1,7 @@
 import { FC, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { defaultUser } from "../../assets";
-import { CiLogout, CiUser } from "react-icons/ci";
+import { defaultUser, LogoFull } from "../../assets";
+import { CiLogout, CiShop, CiUser } from "react-icons/ci";
 import { NavLink } from "../../components";
 import { useClickOutside } from "../../hooks/useClickOutside";
 import { FaBars } from "react-icons/fa6";
@@ -12,8 +12,8 @@ import { MdOutlineDashboard } from "react-icons/md";
 
 const AdminLayout: FC = () => {
   const me = useSelector((state: any) => state.admin.admin);
-  const [toggleNavbar, setToggleNavbar] = useState(false);
-  const [toggleSidebar, setToggleSidebar] = useState(false);
+  const [toggleNavbar, setToggleNavbar] = useState<boolean>(false);
+  const [toggleSidebar, setToggleSidebar] = useState<boolean>(false);
   const refNavbar = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -33,21 +33,19 @@ const AdminLayout: FC = () => {
   };
 
   return (
-    <>
-      <nav className="fixed top-0 w-full bg-orange text-white z-50">
+    <div className="relative">
+      <nav className="fixed top-0 w-full bg-white border-b border-gray-200 z-40">
         <div className="px-3 py-2 lg:px-5 lg:pl-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center justify-start rtl:justify-end">
               <div
-                className="inline-flex items-center p-1.5 rounded-lg sm:hidden cursor-pointer hover:bg-white text-xl text-white hover:text-slate-600"
+                className="inline-flex items-center p-1.5 rounded-lg sm:hidden cursor-pointer hover:bg-white text-xl text-slate-700 hover:text-slate-600"
                 onClick={() => setToggleSidebar(!toggleSidebar)}
               >
                 <FaBars />
               </div>
-              <Link to="https://flowbite.com" className="flex ms-2 md:me-24">
-                <span className="self-center text-xl font-semibold sm:text-xl whitespace-nowrap">
-                  AFM SHOP
-                </span>
+              <Link to="/admin/dashboard" className="flex ms-2">
+                <img src={LogoFull} alt="logo" className="h-8" />
               </Link>
             </div>
             <div className="md:flex gap-2">
@@ -56,7 +54,7 @@ const AdminLayout: FC = () => {
                 onClick={() => setToggleNavbar(!toggleNavbar)}
                 onMouseEnter={() => setToggleNavbar(true)}
                 onMouseLeave={() => setToggleNavbar(false)}
-                className="flex items-center gap-3 p-1 rounded-lg hover:bg-white hover:text-slate-900 cursor-pointer relative z-50 transition-all"
+                className="flex items-center gap-3 p-1 rounded-lg md:hover:bg-slate-100 hover:text-slate-900 cursor-pointer relative z-50 transition-all"
               >
                 <div className="h-8 aspect-square rounded-full mx-auto overflow-hidden">
                   {me.image ? (
@@ -120,7 +118,7 @@ const AdminLayout: FC = () => {
 
       <aside
         id="logo-sidebar"
-        className={`fixed top-14 pt-3 left-0 z-40 w-64 h-screen transition-transform duration-700 -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 ${
+        className={`fixed top-14 pt-3 left-0 z-30 w-64 h-screen transition-transform duration-700 -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 ${
           toggleSidebar ? "transform-none" : "-translate-x-full"
         }`}
         aria-label="Sidebar"
@@ -129,19 +127,35 @@ const AdminLayout: FC = () => {
         <div className="h-full px-3 pb-4 overflow-y-auto bg-white">
           <ul className="space-y-2 font-medium">
             <li>
-              <NavLink to="#" type="admin" active={location === "dashboard"}>
+              <NavLink
+                to="/admin/dashboard"
+                type="admin"
+                active={location === "dashboard"}
+                onClick={() => setToggleSidebar(false)}
+              >
                 <MdOutlineDashboard className="text-lg" />
                 Dashboard
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                to="/admin/products"
+                type="admin"
+                active={location === "products"}
+                onClick={() => setToggleSidebar(false)}
+              >
+                <CiShop className="text-lg" />
+                Produk
               </NavLink>
             </li>
           </ul>
         </div>
       </aside>
 
-      <div>
+      <div className="p-3 sm:ml-64 pt-16">
         <Outlet />
       </div>
-    </>
+    </div>
   );
 };
 

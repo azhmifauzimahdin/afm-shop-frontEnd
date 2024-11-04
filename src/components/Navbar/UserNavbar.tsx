@@ -11,11 +11,13 @@ import { CiLogout, CiShoppingCart, CiUser } from "react-icons/ci";
 import { GoCommentDiscussion } from "react-icons/go";
 import { PiShoppingBag } from "react-icons/pi";
 import { setProduct } from "../../redux/actions/product";
+import { me } from "../../types/user";
+import { setLoading } from "../../redux/actions/loading";
 
 const UserNavbar: FC = () => {
   const location = useLocation().pathname.split("/")[1];
   const navigate = useNavigate();
-  const me = useSelector((state: any) => state.me.me);
+  const me: me = useSelector((state: any) => state.me.me);
   const dispatch = useDispatch();
   const [toggle, setToggle] = useState(false);
   const [toggleMobile, setToggleMobile] = useState(false);
@@ -35,15 +37,18 @@ const UserNavbar: FC = () => {
   const handleSearch = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const response = await productService.getAll(search);
+      dispatch(setLoading(true));
+      const response = await productService.getAll(1, 15, search);
       dispatch(setProduct(response.data.data.products));
+      dispatch(setLoading(false));
     } catch (error) {
+      dispatch(setLoading(false));
       console.log(error);
     }
   };
 
   return (
-    <div className="relative w-full h-full bg-white">
+    <div className="relative w-full h-full bg-white shadow-sm">
       <nav
         id="main-navbar"
         className="container mx-auto p-3 lg:px-5 flex items-center gap-6 md:gap-10 transition-all duration-500"
@@ -88,7 +93,11 @@ const UserNavbar: FC = () => {
               >
                 <div className="h-8 aspect-square rounded-full mx-auto overflow-hidden">
                   {me.image ? (
-                    <img src={me.image} className="w-full" alt="User Image" />
+                    <img
+                      src={me.image_url}
+                      className="w-full"
+                      alt="User Image"
+                    />
                   ) : (
                     <img
                       src={defaultUser}
@@ -111,7 +120,7 @@ const UserNavbar: FC = () => {
                       <div className="h-10 aspect-square rounded-full mx-auto overflow-hidden">
                         {me.image ? (
                           <img
-                            src={me.image}
+                            src={me.image_url}
                             className="w-full"
                             alt="User Image"
                           />

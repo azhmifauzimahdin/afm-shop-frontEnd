@@ -40,6 +40,7 @@ const VerificationCode: FC = () => {
   };
 
   const handleSubmit = async (e: any) => {
+    setMessageError("");
     try {
       setLoading(true);
       const request = {
@@ -62,6 +63,7 @@ const VerificationCode: FC = () => {
   const handleSubmitResending = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
+      setMessage("");
       setLoading(true);
       const response = await authService.resendOtp(me);
       setMessageError("");
@@ -86,14 +88,14 @@ const VerificationCode: FC = () => {
       <Alert
         type="danger"
         hidden={messageError ? false : true}
-        className="text-center my-3"
+        className="text-center"
       >
         {messageError}
       </Alert>
       <Alert
         type="success"
         hidden={message ? false : true}
-        className="text-center my-3"
+        className="text-center"
       >
         {message} ke <span className="font-medium">{me.email}</span>
       </Alert>

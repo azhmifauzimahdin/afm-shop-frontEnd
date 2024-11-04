@@ -10,19 +10,19 @@ interface InputProps {
 
 const ProductCard: FC<InputProps> = (props) => {
   const { product } = props;
+
   return (
-    <>
     <Link
       to="#"
       className="bg-white border border-gray-200 rounded-lg shadow group overflow-hidden relative"
     >
       <div
-        className={`aspect-square group-hover:scale-105 transition duration-500 overflow-hidden`}
+        className={`aspect-square group-hover:scale-105 transition duration-500 shadow-sm overflow-hidden`}
       >
-        {product.image ? (
+        {product.images.length > 0 ? (
           <img
             className="rounded-t-lg w-full"
-            src={product.image}
+            src={product.images[0].image_url}
             alt="Product"
           />
         ) : (
@@ -35,11 +35,13 @@ const ProductCard: FC<InputProps> = (props) => {
       </div>
       <div className="p-2">
         <h5 className="overflow-hidden card-title">{product.title}</h5>
-        <p className="font-bold mb-1">Rp. {product.price}</p>
+        <p className="font-bold mb-1">Rp. {product.price_now}</p>
         {product.discount != 0 ? (
           <div className="flex gap-1 font-semibold text-xs">
-            <p className="line-through text-slate-400">Rp. 60.000</p>
-            <p className="text-orange">6%</p>
+            <span className="line-through text-slate-400">
+              Rp. {product.price}
+            </span>
+            <span className="text-orange">{product.discount}%</span>
           </div>
         ) : (
           ""
@@ -56,7 +58,6 @@ const ProductCard: FC<InputProps> = (props) => {
         </div>
       </div>
     </Link>
-    </>
   );
 };
 

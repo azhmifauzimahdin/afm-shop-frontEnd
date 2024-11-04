@@ -48,6 +48,7 @@ export interface User {
   image: string;
   birthday: string;
   gender: string;
+  image_url: string;
 }
 
 export interface me {
@@ -56,4 +57,6 @@ export interface me {
   email: string;
   image: string;
   birthday: string;
+  gender: string;
+  image_url: string;
 }

@@ -24,11 +24,16 @@ import {
   RedirectIfAuthenticatedUser,
   User,
 } from "./ProtectedRoute";
-import { AdminLogin } from "./screens/Admin";
+import {
+  AdminLogin,
+  CreateProduct,
+  EditProduct,
+  Product,
+} from "./screens/Admin";
 
 const Router: FC = () => {
   const me = useSelector((state: any) => state.me.me);
-  const isAuthenticateUser = me.email;
+  const isAuthenticateUser = me.email && me.name;
   const admin = useSelector((state: any) => state.admin.admin);
   const isAuthenticateAdmin = admin.email;
 
@@ -104,6 +109,12 @@ const Router: FC = () => {
           >
             <Route element={<AdminLayout />}>
               <Route path="/admin/dashboard" element={<div>Dashboard</div>} />
+              <Route path="/admin/products" element={<Product />} />
+              <Route
+                path="/admin/products/create"
+                element={<CreateProduct />}
+              />
+              <Route path="/admin/products/edit" element={<EditProduct />} />
             </Route>
           </Route>
         </Route>

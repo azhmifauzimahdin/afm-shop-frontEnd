@@ -1,23 +1,16 @@
-import { Product } from "../../types/product";
-import { ADDPRODUCT, DELPRODUCT, SETPRODUCT } from "../types/product";
+import { DataResponse } from "../../types/product";
+import { DELPRODUCT, SETPRODUCT } from "../types/product";
 
-export const setProduct = (data: Product[]) => {
+export const setProduct = (data: DataResponse) => {
   return {
     type: SETPRODUCT,
     payload: data,
   };
 };
 
-export const addProduct = (data: Product) => {
-  return {
-    type: ADDPRODUCT,
-    payload: data,
-  };
-};
-
-export const delProduct = (data: Product) => {
+export const delProduct = (id: string) => {
   return {
     type: DELPRODUCT,
-    payload: data,
+    payload: id,
   };
 };

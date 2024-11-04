@@ -40,14 +40,13 @@ const VerificationCode: FC = () => {
   };
 
   const handleSubmit = async (e: any) => {
+    setMessageError("");
     try {
       setLoading(true);
       const request = {
         email: me.email,
         otp: e,
       };
-      console.log(request);
-
       const response = await authService.otpVerificationForgetPassword(request);
       request.email = response.data.data.email;
       dispatch(updateMe(request));
@@ -63,6 +62,7 @@ const VerificationCode: FC = () => {
 
   const handleSubmitResending = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setMessage("");
     try {
       setLoading(true);
       const response = await authService.resendOtpForgetPassword(me);
@@ -88,14 +88,14 @@ const VerificationCode: FC = () => {
       <Alert
         type="danger"
         hidden={messageError ? false : true}
-        className="text-center my-3"
+        className="text-center"
       >
         {messageError}
       </Alert>
       <Alert
         type="success"
         hidden={message ? false : true}
-        className="text-center my-3"
+        className="text-center"
       >
         {message} ke <span className="font-medium">{me.email}</span>
       </Alert>

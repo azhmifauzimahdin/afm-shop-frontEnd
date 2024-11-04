@@ -7,6 +7,7 @@ import { userService } from "../../../services";
 import { useDispatch, useSelector } from "react-redux";
 import { defaultUser } from "../../../assets";
 import { updateMe } from "../../../redux/actions/me";
+import { me } from "../../../types/user";
 
 interface FormValues {
   name: string;
@@ -17,7 +18,7 @@ interface FormValues {
 
 const Profile: FC = () => {
   DocumentTitle("Profil Saya");
-  const me = useSelector((state: any) => state.me.me);
+  const me: me = useSelector((state: any) => state.me.me);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [preview, setPreview] = useState<File | null>(null);
@@ -45,6 +46,7 @@ const Profile: FC = () => {
 
   const handleSubmit = async (values: FormValues) => {
     try {
+      setMessage("");
       setLoading(true);
       const formData = {
         ...values,
@@ -105,7 +107,7 @@ const Profile: FC = () => {
               <h2 className="block mb-2 font-medium">EMAIL</h2>
               <div className="text-sm mb-1">
                 {me.email}
-                <A to="email" clasName="ms-2">
+                <A to="email" className="ms-2">
                   Ubah
                 </A>
               </div>
@@ -158,7 +160,9 @@ const Profile: FC = () => {
               {me.image ? (
                 <img
                   src={
-                    preview === null ? me.image : URL.createObjectURL(preview)
+                    preview === null
+                      ? me.image_url
+                      : URL.createObjectURL(preview)
                   }
                   className="w-full"
                   id="image_preview"

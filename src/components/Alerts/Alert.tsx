@@ -1,5 +1,7 @@
 import { FC, useEffect, useState } from "react";
 import { FaXmark } from "react-icons/fa6";
+import { useDispatch } from "react-redux";
+import { setMessage } from "../../redux/actions/message";
 
 interface InputProps {
   type: "danger" | "success";
@@ -8,11 +10,17 @@ interface InputProps {
   className?: string;
 }
 const Alert: FC<InputProps> = (props) => {
-  const { type, children, hidden, className } = props;
+  const { type, children, hidden = true, className } = props;
   const [visible, setVisible] = useState<boolean>(!hidden);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setVisible(!hidden);
+    const timer = setInterval(() => {
+      setVisible(false);
+      dispatch(setMessage(""));
+    }, 7000);
+    return () => clearInterval(timer);
   }, [hidden]);
 
   let color;
@@ -26,8 +34,8 @@ const Alert: FC<InputProps> = (props) => {
 
   return (
     <div
-      className={`text-sm rounded-lg relative p-3 mb-3	${color} 
-        ${visible ? "block" : "hidden"} ${className} `}
+      className={`text-sm fixed transition-all duration-500 right-1/2 md:right-5 translate-x-1/2 md:translate-x-0 w-[84%] md:w-96 shadow rounded-lg py-3 ps-3 pe-8 z-50 ${color} 
+        ${visible ? "top-5" : "-top-20"} ${className} `}
       role="alert"
     >
       <div className="overflow-hidden">
@@ -36,7 +44,10 @@ const Alert: FC<InputProps> = (props) => {
           className={`absolute right-4 top-1/2 -translate-y-1/2 cursor-pointer ${
             !visible && "hidden"
           }`}
-          onClick={() => setVisible(false)}
+          onClick={() => {
+            dispatch(setMessage(""));
+            setVisible(false);
+          }}
         />
       </div>
     </div>

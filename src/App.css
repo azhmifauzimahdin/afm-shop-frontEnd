@@ -1,3 +1,11 @@
+.hd-scroll {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.hd-scroll::-webkit-scrollbar {
+  display: none;
+}
+
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
@@ -27,4 +35,9 @@ input[type="number"] {
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
   text-overflow: ellipsis;
+}
+
+td,
+th {
+  padding: 0.5rem;
 }

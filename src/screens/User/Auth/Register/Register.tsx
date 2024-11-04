@@ -30,6 +30,8 @@ const Register: FC = () => {
   });
 
   const handleSubmit = async (values: FormValues) => {
+    console.log("masuk");
+
     try {
       setLoading(true);
       const response = await authService.register(values);
