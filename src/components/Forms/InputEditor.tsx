@@ -1,5 +1,5 @@
 import { FC } from "react";
-import "./InputEditot.css";
+import "./InputEditor.css";
 import {
   BtnBold,
   BtnBulletList,
@@ -50,7 +50,11 @@ const InputEditor: FC<InputProps> = (props) => {
           <label htmlFor={id} className="block mb-2 font-medium">
             {label}
           </label>
-          <div className={`${disabled ? "bg-slate-100" : ""}`}>
+          <div
+            className={`${disabled ? "bg-slate-100" : ""} ${
+              errorMessage ? "error" : ""
+            }`}
+          >
             <EditorProvider>
               <Editor
                 id={id}

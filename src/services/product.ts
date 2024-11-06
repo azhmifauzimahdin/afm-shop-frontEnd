@@ -1,5 +1,6 @@
 import { AxiosResponse } from "axios";
 import {
+  ProductImageReponse,
   ProductRequest,
   ProductResponse,
   ProductsReponse,
@@ -32,11 +33,28 @@ export const addProduct = async (
 export const editProduct = async (
   id: string
 ): Promise<AxiosResponse<ProductResponse>> => {
-  return await httpRequest.get(`products/${id}`);
+  return await httpRequest.get(`/products/${id}`);
+};
+
+export const updateProduct = async (
+  id: string,
+  Request: ProductRequest
+): Promise<AxiosResponse<ProductResponse>> => {
+  return await httpRequest.post(`/products/${id}`, Request, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 };
 
 export const deleteProduct = async (
   id: string
 ): Promise<AxiosResponse<ProductsReponse>> => {
   return await httpRequest.delete(`/products/${id}`);
+};
+
+export const deleteProductImage = async (
+  id: string
+): Promise<AxiosResponse<ProductImageReponse>> => {
+  return await httpRequest.delete(`/images/${id}`);
 };

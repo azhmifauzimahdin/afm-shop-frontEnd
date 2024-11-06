@@ -6,7 +6,7 @@ import { TableColumn } from "../../../components/Table/Table";
 import { FaEye, FaPen, FaTrash } from "react-icons/fa6";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { delProduct, setProduct } from "../../../redux/actions/product";
+import { setProduct } from "../../../redux/actions/product";
 import { DocumentTitle } from "../../../layouts";
 import { setMessage } from "../../../redux/actions/message";
 import { setID } from "../../../redux/actions/id";
@@ -30,7 +30,7 @@ const Product: FC = () => {
     return () => clearTimeout(timer);
   }, [search]);
 
-  const getAllProducts = async (page = 1, perPage = 4) => {
+  const getAllProducts = async (page = 1, perPage = 10) => {
     try {
       setLoading(true);
       const response = await productService.getAll(page, perPage, search);
@@ -113,9 +113,9 @@ const Product: FC = () => {
       setLoading(true);
       const response = await productService.deleteProduct(id);
       dispatch(setMessage(response.data.message));
-      dispatch(delProduct(id));
       setVisible(false);
       setLoading(false);
+      getAllProducts();
     } catch (error: any) {
       setErrorMessage(error.response.data.message);
       setLoading(false);

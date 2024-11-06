@@ -72,7 +72,7 @@ const AdminLayout: FC = () => {
                   id="user-menu"
                   ref={refNavbar}
                   onClick={() => setToggleNavbar(false)}
-                  className={`absolute top-10 right-0 bg-white rounded-lg shadow overflow-hidden transition-all duration-700 ${
+                  className={`z-50 absolute top-10 right-0 bg-white rounded-lg shadow overflow-hidden transition-all duration-700 ${
                     !toggleNavbar ? "h-0" : "h-36"
                   }`}
                 >

@@ -86,11 +86,11 @@ const Input: FC<InputProps> = (props) => {
               id={id}
               name={name}
               value={value}
-              className={`bg-gray-50 rounded-md border border-gray-300 ${
-                size === "sm" ? "p-2" : "p-2.5"
-              } ${type !== "radio" && "w-full"} ${
-                type === "password" && "pe-10"
-              } disabled:bg-slate-100`}
+              className={`bg-gray-50 rounded-md border ${
+                errorMessage ? "border-orange" : "border-gray-300"
+              } ${size === "sm" ? "p-2" : "p-2.5"} ${
+                type !== "radio" && "w-full"
+              } ${type === "password" && "pe-10"} disabled:bg-slate-100`}
               placeholder={placeholder}
               disabled={disabled}
               onChange={onChange}

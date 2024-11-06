@@ -62,3 +62,12 @@ export interface ProductResponse {
     product: Product;
   };
 }
+
+export interface ProductImageReponse {
+  code: number;
+  success: boolean;
+  message: string;
+  data: {
+    image: ProductImage;
+  };
+}

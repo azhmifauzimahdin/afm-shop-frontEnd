@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   Alert,
@@ -12,8 +12,8 @@ import { DocumentTitle } from "../../../layouts";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { productService } from "../../../services";
-import { ProductRequest } from "../../../types/product";
-import { useDispatch } from "react-redux";
+import { ProductImage, ProductRequest } from "../../../types/product";
+import { useDispatch, useSelector } from "react-redux";
 import { setMessage } from "../../../redux/actions/message";
 
 interface FormValues {
@@ -24,12 +24,41 @@ interface FormValues {
   images: any;
 }
 
-const CreateProduct: FC = () => {
-  DocumentTitle("Tambah Produk");
+const EditProduct: FC = () => {
+  DocumentTitle("Edit Produk");
   const [loading, setLoading] = useState<boolean>(false);
+  const [loadingRender, setLoadingRender] = useState<boolean>(false);
+  const [editImages, setEditImages] = useState<any[]>([]);
+  const [deleteImages, setDeleteImages] = useState<any[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const idProduct = useSelector((state: any) => state.id.id);
+
+  useEffect(() => {
+    if (!idProduct) navigate("/admin/products");
+    else loadData();
+  }, []);
+
+  const loadData = async () => {
+    try {
+      setLoadingRender(true);
+      const response = await productService.editProduct(idProduct);
+      formik.setFieldValue("title", response.data.data.product.title);
+      formik.setFieldValue(
+        "description",
+        response.data.data.product.description
+      );
+      formik.setFieldValue("price", response.data.data.product.price);
+      formik.setFieldValue("discount", response.data.data.product.discount);
+      setEditImages(response.data.data.product.images);
+      //   formik.setFieldValue("images", response.data.data.product.images);
+      setLoadingRender(false);
+    } catch (error) {
+      console.log(error);
+      setLoadingRender(false);
+    }
+  };
 
   const validationSchema = Yup.object().shape({
     title: Yup.string().required("Nama wajib diisi"),
@@ -68,18 +97,34 @@ const CreateProduct: FC = () => {
 
   const handleSubmit = async (values: FormValues) => {
     setErrorMessage("");
+    if (deleteImages.length > 0) {
+      deleteImages.map(async (id: string) => {
+        try {
+          await productService.deleteProductImage(id);
+        } catch (error) {
+          setErrorMessage("Terjadi kesalahan");
+          loadData();
+          console.log(error);
+        }
+      });
+    }
     try {
       dispatch(setMessage(""));
       setLoading(true);
-      const response = await productService.addProduct(
-        values as ProductRequest
+      const formData = {
+        ...values,
+        _method: "put",
+      };
+      const response = await productService.updateProduct(
+        idProduct,
+        formData as ProductRequest
       );
       dispatch(setMessage(response.data.message));
       setLoading(false);
       navigate("/admin/products");
     } catch (error: any) {
-      setLoading(false);
       setErrorMessage("Terjadi kesalahan");
+      setLoading(false);
       console.log(error);
     }
   };
@@ -96,18 +141,23 @@ const CreateProduct: FC = () => {
     onSubmit: handleSubmit,
   });
 
+  const handleDelete = async (id: string) => {
+    setEditImages(editImages.filter((data: ProductImage) => data.id !== id));
+    setDeleteImages([...deleteImages, id]);
+  };
+
   return (
     <>
       <Alert type="danger" hidden={errorMessage ? false : true}>
         {errorMessage}
       </Alert>
       <div className="flex flex-col gap-1 md:flex-row md:justify-between md:items-center mb-4">
-        <div className="font-medium text-2xl">Tambah Produk</div>
+        <div className="font-medium text-2xl">Edit Produk</div>
         <div className="text-xs md:text-sm">
           <Link to="/admin/dashboard" className="text-blue-700 me-1.5">
             Home
           </Link>
-          / Tambah Produk
+          / Edit Produk
         </div>
       </div>
       <div className="bg-white rounded shadow p-4">
@@ -122,6 +172,7 @@ const CreateProduct: FC = () => {
                 value={formik.values.title}
                 onChange={formik.handleChange}
                 disabled={loading}
+                loadingRender={loadingRender}
                 placeholder="Masukan nama"
                 errorMessage={
                   formik.touched.title && formik.errors.title
@@ -134,20 +185,16 @@ const CreateProduct: FC = () => {
                 id="description"
                 name="description"
                 value={formik.values.description}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  formik.setFieldValue(
-                    "description",
-                    e.target.value !== "<br>" ? e.target.value : ""
-                  );
-                }}
+                onChange={formik.handleChange}
                 disabled={loading}
+                loadingRender={loadingRender}
                 errorMessage={
                   formik.touched.description && formik.errors.description
                     ? formik.errors.description
                     : ""
                 }
               />
-              <div className="flex">
+              <div className="flex gap-3">
                 <InputGroup
                   label="HARGA"
                   type="number"
@@ -156,6 +203,7 @@ const CreateProduct: FC = () => {
                   value={formik.values.price}
                   onChange={formik.handleChange}
                   disabled={loading}
+                  loadingRender={loadingRender}
                   width="md:w-28"
                   placeholder="Masukan harga"
                   errorMessage={
@@ -173,6 +221,7 @@ const CreateProduct: FC = () => {
                   value={formik.values.discount}
                   onChange={formik.handleChange}
                   disabled={loading}
+                  loadingRender={loadingRender}
                   width="w-[74px]"
                   append={<p>%</p>}
                   errorMessage={
@@ -189,7 +238,10 @@ const CreateProduct: FC = () => {
                   label="FOTO"
                   id="images"
                   name="images"
+                  editImages={editImages}
                   disabled={loading}
+                  loadingRender={loadingRender}
+                  onDelete={handleDelete}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     if (!e.target.files) return;
                     const filesArray = Array.from(e.target.files as any);
@@ -209,7 +261,12 @@ const CreateProduct: FC = () => {
             </div>
           </div>
           <div className="mt-5 flex gap-2">
-            <Button type="submit" color="primary" disabled={loading}>
+            <Button
+              type="submit"
+              color="primary"
+              disabled={loading}
+              loadingRender={loadingRender}
+            >
               Simpan
             </Button>
             <Button
@@ -217,6 +274,7 @@ const CreateProduct: FC = () => {
               color="secondary"
               disabled={loading}
               onClick={() => navigate("/admin/products")}
+              loadingRender={loadingRender}
             >
               Kembali
             </Button>
@@ -227,4 +285,4 @@ const CreateProduct: FC = () => {
   );
 };
 
-export default CreateProduct;
+export default EditProduct;
