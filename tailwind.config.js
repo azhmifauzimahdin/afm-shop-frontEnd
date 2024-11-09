@@ -8,7 +8,8 @@ export default {
     extend: {
       colors: {
         "orange": "#FF4C61",
-        "purple": "#6C6CFF"
+        "purple": "#6C6CFF",
+        "grayfm": "#EBF1FC"
       },
     },
   },

@@ -20,7 +20,7 @@ const Modal: FC<ModalProps> = (props) => {
     >
       <div
         ref={ref}
-        className={`bg-white absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-3 rounded-lg transition-all duration-300 shadow w-10/12 sm:w-auto ${
+        className={`bg-white absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-3 rounded-xl transition-all duration-300 shadow w-10/12 sm:w-auto ${
           visible ? "scale-100" : "scale-50"
         } ${className}`}
       >

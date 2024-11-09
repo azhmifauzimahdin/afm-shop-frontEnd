@@ -2,7 +2,7 @@ import { FC, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { defaultUser, LogoFull } from "../../assets";
 import { CiLogout, CiShop, CiUser } from "react-icons/ci";
-import { NavLink } from "../../components";
+import { NavLink, ProgressiveImg } from "../../components";
 import { useClickOutside } from "../../hooks/useClickOutside";
 import { FaBars } from "react-icons/fa6";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
@@ -45,7 +45,7 @@ const AdminLayout: FC = () => {
                 <FaBars />
               </div>
               <Link to="/admin/dashboard" className="flex ms-2">
-                <img src={LogoFull} alt="logo" className="h-8" />
+                <ProgressiveImg src={LogoFull} alt="logo" className="h-8" />
               </Link>
             </div>
             <div className="md:flex gap-2">
@@ -58,9 +58,13 @@ const AdminLayout: FC = () => {
               >
                 <div className="h-8 aspect-square rounded-full mx-auto overflow-hidden">
                   {me.image ? (
-                    <img src={me.image} className="w-full" alt="User Image" />
+                    <ProgressiveImg
+                      src={me.image}
+                      className="w-full"
+                      alt="User Image"
+                    />
                   ) : (
-                    <img
+                    <ProgressiveImg
                       src={defaultUser}
                       className="w-full"
                       alt="User Image"
@@ -73,20 +77,20 @@ const AdminLayout: FC = () => {
                   ref={refNavbar}
                   onClick={() => setToggleNavbar(false)}
                   className={`z-50 absolute top-10 right-0 bg-white rounded-lg shadow overflow-hidden transition-all duration-700 ${
-                    !toggleNavbar ? "h-0" : "h-36"
+                    !toggleNavbar ? "h-0" : "h-40"
                   }`}
                 >
                   <div className="grid gap-2 w-auto text-nowrap p-4">
-                    <div className="flex items-center gap-3 border-b pb-3 border-b-slate-300 mb-1">
+                    <div className="flex items-center gap-3 border-b pb-3 border-b-slate-300">
                       <div className="h-10 aspect-square rounded-full mx-auto overflow-hidden">
                         {me.image ? (
-                          <img
+                          <ProgressiveImg
                             src={me.image}
                             className="w-full"
                             alt="User Image"
                           />
                         ) : (
-                          <img
+                          <ProgressiveImg
                             src={defaultUser}
                             className="w-full"
                             alt="User Image"
@@ -98,7 +102,7 @@ const AdminLayout: FC = () => {
                         <div className="w-44 text-xs truncate">{me.email}</div>
                       </div>
                     </div>
-                    <div className="grid grid-cols-1 gap-2">
+                    <div className="grid grid-cols-1">
                       <NavLink to="/account/profile">
                         <CiUser className="text-lg" />
                         Akun Saya

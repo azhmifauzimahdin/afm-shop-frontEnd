@@ -3,7 +3,7 @@ import { Link, Outlet, useLocation } from "react-router-dom";
 import { LogoFull } from "../../assets";
 import { useDispatch } from "react-redux";
 import { deleteMe } from "../../redux/actions/me";
-import { A } from "../../components";
+import { A, ProgressiveImg } from "../../components";
 
 const AuthLayout: FC = () => {
   const location = useLocation();
@@ -12,10 +12,14 @@ const AuthLayout: FC = () => {
   return (
     <>
       <div className="container mx-auto min-h-screen flex flex-col gap-5 justify-center items-center p-3">
-        <div className="bg-white rounded-lg shadow-md px-5 py-8 w-full sm:w-96">
+        <div className="bg-white rounded-3xl shadow-md px-5 py-8 w-full sm:w-96">
           {location.pathname !== "/admin/login" ? (
             <Link to="/">
-              <img src={LogoFull} alt="Logo" className="h-10 mx-auto mb-4" />
+              <ProgressiveImg
+                src={LogoFull}
+                alt="Logo"
+                className="h-10 mx-auto mb-4"
+              />
             </Link>
           ) : (
             ""

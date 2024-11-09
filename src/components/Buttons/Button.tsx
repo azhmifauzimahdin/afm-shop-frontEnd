@@ -37,14 +37,15 @@ const Primary: FC<InputProps> = (props) => {
       : color === "link"
       ? "text-orange hover:text-purple disabled:text-slate-500"
       : "";
+
   return (
     <>
       {loadingRender ? (
         <div>
           {width ? (
-            <Skeleton height={36} />
+            <Skeleton height={36} borderRadius={24} />
           ) : (
-            <Skeleton height={36} width={100} />
+            <Skeleton height={36} width={100} borderRadius={24} />
           )}
         </div>
       ) : (
@@ -52,7 +53,7 @@ const Primary: FC<InputProps> = (props) => {
           type={type}
           disabled={disabled}
           onClick={onClick}
-          className={`relative rounded-md font-medium group ${
+          className={`relative rounded-3xl shadow font-medium group ${
             color !== "link"
               ? `${
                   size === "sm" ? "p-2" : "px-5 py-2.5"

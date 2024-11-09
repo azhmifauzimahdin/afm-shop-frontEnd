@@ -107,6 +107,10 @@ const CreateProduct: FC = () => {
           <Link to="/admin/dashboard" className="text-blue-700 me-1.5">
             Home
           </Link>
+          <span className="me-1.5">/</span>
+          <Link to="/admin/products" className="text-blue-700 me-1.5">
+            Produk
+          </Link>
           / Tambah Produk
         </div>
       </div>
@@ -147,7 +151,7 @@ const CreateProduct: FC = () => {
                     : ""
                 }
               />
-              <div className="flex">
+              <div className="flex flex-col md:flex-row gap-3">
                 <InputGroup
                   label="HARGA"
                   type="number"

@@ -18,16 +18,19 @@ input[type="number"] {
 
 .section_title {
   position: relative;
+  padding-left: 1.1rem;
+  margin-bottom: 0.3rem;
 }
 
 .section_title::before {
   content: "";
-  background: url(./assets/svg/dots-bg.svg);
-  height: 2rem;
-  width: 2rem;
+  background-color: #ff4c61;
+  border-radius: 1rem;
+  height: 1.7rem;
+  width: 0.6rem;
   position: absolute;
-  left: -0.5rem;
-  top: -0.2rem;
+  left: 0;
+  top: 0;
 }
 
 .card-title {
@@ -40,4 +43,25 @@ input[type="number"] {
 td,
 th {
   padding: 0.5rem;
+}
+
+.loading {
+  filter: blur(10px);
+  clip-path: inset(0);
+}
+.loaded {
+  filter: blur(0px);
+  transition: filter 0.5s linear;
+}
+
+.swiper-button-prev::after,
+.swiper-button-next::after {
+  color: #ff4c61;
+  --swiper-navigation-size: 1.2rem;
+}
+
+.swiper-slide {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
 }

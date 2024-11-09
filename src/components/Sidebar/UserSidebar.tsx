@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { me } from "../../types/user";
 import { Authentication, defaultUser } from "../../assets";
-import { Button, NavLink } from "..";
+import { Button, NavLink, ProgressiveImg } from "..";
 import { useLocation, useNavigate } from "react-router-dom";
 import { authService } from "../../services";
 import { useDispatch } from "react-redux";
@@ -36,9 +36,17 @@ const UserSidebar: FC<InputProps> = (props) => {
           <div className="flex items-center gap-3 border-b pb-3 border-b-slate-200 mb-5">
             <div className="h-10 aspect-square rounded-full overflow-hidden">
               {me.image ? (
-                <img src={me.image_url} className="w-full" alt="User Image" />
+                <ProgressiveImg
+                  src={me.image_url}
+                  className="w-full"
+                  alt="User Image"
+                />
               ) : (
-                <img src={defaultUser} className="w-full" alt="User Image" />
+                <ProgressiveImg
+                  src={defaultUser}
+                  className="w-full"
+                  alt="User Image"
+                />
               )}
             </div>
             <div>
@@ -47,7 +55,7 @@ const UserSidebar: FC<InputProps> = (props) => {
             </div>
           </div>
 
-          <div className="grid gap-4" onClick={onClick}>
+          <div className="grid gap-1" onClick={onClick}>
             <NavLink to="/account/profile" active={location === "profile"}>
               <CiUser className="text-lg" />
               Profil Saya
@@ -68,7 +76,11 @@ const UserSidebar: FC<InputProps> = (props) => {
       ) : (
         <div className="flex items-center flex-wrap h-[80vh]">
           <div>
-            <img src={Authentication} alt="Autentikasi" className="w-full" />
+            <ProgressiveImg
+              src={Authentication}
+              alt="Autentikasi"
+              className="w-full"
+            />
             <div className="flex justify-center gap-3 w-full">
               <Button
                 type="button"

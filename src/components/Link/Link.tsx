@@ -17,7 +17,7 @@ const Link: FC<InputProps> = (props) => {
       onClick={onClick}
       className={`text-orange disabled:text-slate-500 transition-all ${
         type === "button"
-          ? "border p-2 border-orange rounded-md hover:bg-orange hover:text-white"
+          ? "border p-2 border-orange rounded-3xl hover:bg-orange hover:text-white"
           : "hover:text-purple"
       } ${className}`}
     >

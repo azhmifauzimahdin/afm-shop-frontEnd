@@ -1,9 +1,7 @@
 import { Product } from "../../types/product";
 
 const initialState = {
-  products: {
-    data: [],
-  },
+  products: [],
 };
 
 const reducer = (
@@ -20,11 +18,9 @@ const reducer = (
     case "DELPRODUCT":
       return {
         ...state,
-        products: {
-          data: state.products.data.filter(
-            (todo: Product) => todo.id !== payload
-          ),
-        },
+        products: state.products.filter(
+          (product: Product) => product.id !== payload
+        ),
       };
     default:
       return {

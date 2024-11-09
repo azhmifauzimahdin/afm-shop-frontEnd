@@ -55,13 +55,16 @@ const Input: FC<InputProps> = (props) => {
   return (
     <>
       {loadingRender ? (
-        <div>
-          <Skeleton height={20} width={100} className="mb-2" />
-          {width ? (
-            <Skeleton height={36} width={width} />
-          ) : (
-            <Skeleton height={36} />
-          )}
+        <div className={`${width ? width : "w-full"}`}>
+          {label ? (
+            <Skeleton
+              height={20}
+              width={100}
+              borderRadius={24}
+              className="mb-2"
+            />
+          ) : null}
+          <Skeleton borderRadius={24} height={36} />
         </div>
       ) : (
         <div className={`${type === "radio" ? "flex item" : ""} ${width}`}>
@@ -86,8 +89,8 @@ const Input: FC<InputProps> = (props) => {
               id={id}
               name={name}
               value={value}
-              className={`bg-gray-50 rounded-md border ${
-                errorMessage ? "border-orange" : "border-gray-300"
+              className={`bg-gray-50 rounded-3xl px-4 border ${
+                errorMessage ? "shadow-sm shadow-orange/30" : "border-gray-300"
               } ${size === "sm" ? "p-2" : "p-2.5"} ${
                 type !== "radio" && "w-full"
               } ${type === "password" && "pe-10"} disabled:bg-slate-100`}

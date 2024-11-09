@@ -8,16 +8,9 @@ import {
 import httpRequest from "./api";
 
 export const getAll = async (
-  page?: number,
-  perPage?: number,
   search?: string
 ): Promise<AxiosResponse<ProductsReponse>> => {
-  const requestPage = page ?? 1;
-  const requestPerPage = perPage ?? 10;
-  const requestSearch = search ?? "";
-  return await httpRequest.get(
-    `/products?page=${requestPage}&per_page=${requestPerPage}&search=${requestSearch}`
-  );
+  return await httpRequest.get(`/products?search=${search ?? ""}`);
 };
 
 export const addProduct = async (

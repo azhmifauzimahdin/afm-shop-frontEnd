@@ -41,9 +41,9 @@ const InputGroup: FC<InputProps> = (props) => {
         <div className={`grow`}>
           <Skeleton height={20} width={100} className="mb-2" />
           {width ? (
-            <Skeleton height={36} width={width} />
+            <Skeleton height={36} width={width} borderRadius={24} />
           ) : (
-            <Skeleton height={36} />
+            <Skeleton height={36} borderRadius={24} />
           )}
         </div>
       ) : (
@@ -62,11 +62,9 @@ const InputGroup: FC<InputProps> = (props) => {
               disabled={disabled}
               value={value}
               onChange={onChange}
-              className={`disabled:bg-slate-100 bg-gray-50 border ${
+              className={`px-3 disabled:bg-slate-100 bg-gray-50 border ${
                 errorMessage ? "border-orange" : "border-gray-300"
-              } text-gray-900 text-sm rounded-lg w-full p-2.5 ${
-                prepend ? "ps-10" : "pe-10"
-              }`}
+              } rounded-3xl w-full p-2.5 ${prepend ? "ps-10" : "pe-10"}`}
             />
             {prepend ? (
               <div className="absolute start-3 bottom-2.5 text-slate-600">

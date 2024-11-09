@@ -1,7 +1,7 @@
-import { DataResponse } from "../../types/product";
+import { Product } from "../../types/product";
 import { DELPRODUCT, SETPRODUCT } from "../types/product";
 
-export const setProduct = (data: DataResponse) => {
+export const setProduct = (data: [Product]) => {
   return {
     type: SETPRODUCT,
     payload: data,

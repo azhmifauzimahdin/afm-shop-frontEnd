@@ -1,15 +1,15 @@
 import { FC, useEffect, useState } from "react";
-import { A, Alert, Button, Input, Modal, Table } from "../../../components";
+import { A, Alert, Button, Modal, Table } from "../../../components";
 import { productService } from "../../../services";
 import { Question } from "../../../assets";
-import { TableColumn } from "../../../components/Table/Table";
 import { FaEye, FaPen, FaTrash } from "react-icons/fa6";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { setProduct } from "../../../redux/actions/product";
+import { delProduct, setProduct } from "../../../redux/actions/product";
 import { DocumentTitle } from "../../../layouts";
 import { setMessage } from "../../../redux/actions/message";
 import { setID } from "../../../redux/actions/id";
+import { TableColumn } from "../../../components/Table/Table";
 
 const Product: FC = () => {
   DocumentTitle("Produk");
@@ -17,23 +17,19 @@ const Product: FC = () => {
   const message = useSelector((state: any) => state.message.message);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [search, setSearch] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const [visible, setVisible] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [id, setId] = useState<string>("");
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      getAllProducts();
-    }, 500);
-    return () => clearTimeout(timer);
-  }, [search]);
+    getAllProducts();
+  }, []);
 
-  const getAllProducts = async (page = 1, perPage = 10) => {
+  const getAllProducts = async () => {
     try {
       setLoading(true);
-      const response = await productService.getAll(page, perPage, search);
+      const response = await productService.getAll();
       dispatch(setProduct(response.data.data.products));
       setLoading(false);
     } catch (error) {
@@ -53,7 +49,7 @@ const Product: FC = () => {
       title: "Harga",
       dataIndex: "price",
       sort: "price",
-      render: (data) => <>Rp. {data.price}</>,
+      render: (data: any) => <>Rp. {data.price}</>,
       wrap: true,
     },
     {
@@ -98,10 +94,6 @@ const Product: FC = () => {
     },
   ];
 
-  const handlePagination = (e: any) => {
-    getAllProducts(e.selected + 1);
-  };
-
   const handleConfirmDelete = (id: string) => {
     setVisible(true);
     setId(id);
@@ -110,15 +102,12 @@ const Product: FC = () => {
 
   const handleDelete = async () => {
     try {
-      setLoading(true);
       const response = await productService.deleteProduct(id);
       dispatch(setMessage(response.data.message));
+      dispatch(delProduct(id));
       setVisible(false);
-      setLoading(false);
-      getAllProducts();
     } catch (error: any) {
       setErrorMessage(error.response.data.message);
-      setLoading(false);
       setVisible(false);
     }
   };
@@ -173,36 +162,18 @@ const Product: FC = () => {
           / Produk
         </div>
       </div>
-      <div className="bg-white rounded shadow p-4">
+      <div className="bg-white rounded-xl shadow p-4">
         <Alert type="success" hidden={!message ? true : false}>
           {message}
         </Alert>
         <Alert type="danger" hidden={!errorMessage ? true : false}>
           {errorMessage}
         </Alert>
-        <div className="flex justify-between mb-3">
-          <div>
-            <Button
-              type="button"
-              color="primary"
-              className="px-3"
-              onClick={() => navigate("create")}
-            >
-              Tambah Data
-            </Button>
-          </div>
-          <Input
-            type="search"
-            id="search"
-            name="search"
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Cari"
-          />
-        </div>
         <Table
           data={products}
           columns={columns}
-          handlePagination={handlePagination}
+          pathAddData="create"
+          search
           loading={loading}
         />
       </div>

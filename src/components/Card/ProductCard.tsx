@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Product as ProductProps } from "../../types/product";
 import { DefaultProduct, Logo } from "../../assets";
 import { FaStar } from "react-icons/fa6";
+import ProgressiveImg from "../Image/ProgressiveImg";
 
 interface InputProps {
   product: ProductProps;
@@ -20,13 +21,13 @@ const ProductCard: FC<InputProps> = (props) => {
         className={`aspect-square group-hover:scale-105 transition duration-500 shadow-sm overflow-hidden`}
       >
         {product.images.length > 0 ? (
-          <img
+          <ProgressiveImg
             className="rounded-t-lg w-full"
             src={product.images[0].image_url}
             alt="Product"
           />
         ) : (
-          <img
+          <ProgressiveImg
             className="rounded-t-lg w-full"
             src={DefaultProduct}
             alt="Product"
@@ -48,7 +49,7 @@ const ProductCard: FC<InputProps> = (props) => {
         )}
         <div className="grid grid-cols-8 text-sm gap-1 text-slate-500 mt-2">
           <div className="flex items-center">
-            <img src={Logo} alt="Logo toko" className="w-full" />
+            <ProgressiveImg src={Logo} alt="Logo toko" className="w-full" />
           </div>
           <div className="col-span-7">AFM Store</div>
           <div>

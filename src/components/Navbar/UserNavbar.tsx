@@ -5,7 +5,13 @@ import { FaArrowLeft, FaBars } from "react-icons/fa";
 import { authService, productService } from "../../services";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteMe } from "../../redux/actions/me";
-import { Button, InputGroup, NavLink, UserSidebar } from "../../components";
+import {
+  Button,
+  InputGroup,
+  NavLink,
+  ProgressiveImg,
+  UserSidebar,
+} from "../../components";
 import { FaMagnifyingGlass, FaXmark } from "react-icons/fa6";
 import { CiLogout, CiShoppingCart, CiUser } from "react-icons/ci";
 import { GoCommentDiscussion } from "react-icons/go";
@@ -38,7 +44,7 @@ const UserNavbar: FC = () => {
     e.preventDefault();
     try {
       dispatch(setLoading(true));
-      const response = await productService.getAll(1, 15, search);
+      const response = await productService.getAll(search);
       dispatch(setProduct(response.data.data.products));
       dispatch(setLoading(false));
     } catch (error) {
@@ -48,13 +54,13 @@ const UserNavbar: FC = () => {
   };
 
   return (
-    <div className="relative w-full h-full bg-white shadow-sm">
+    <div className="fixed top-0 z-50 md:relative w-full md:h-full bg-white shadow-sm">
       <nav
         id="main-navbar"
         className="container mx-auto p-3 lg:px-5 flex items-center gap-6 md:gap-10 transition-all duration-500"
       >
         <Link to="/" className="hidden sm:block w-full">
-          <img src={LogoFull} alt="Logo AFM" className="h-8" />
+          <ProgressiveImg src={LogoFull} alt="Logo AFM" className="h-8" />
         </Link>
         <button
           onClick={() => navigate(-1)}
@@ -73,10 +79,10 @@ const UserNavbar: FC = () => {
           />
         </form>
         <div className="flex items-center gap-1 relative">
-          <Link to="" className="p-2 rounded-lg hover:bg-slate-100 text-lg">
+          <Link to="" className="p-2 rounded-3xl hover:bg-slate-100 text-lg">
             <GoCommentDiscussion className="text-xl" />
           </Link>
-          <Link to="" className="p-2 rounded-lg hover:bg-slate-100 text-lg">
+          <Link to="" className="p-2 rounded-3xl hover:bg-slate-100 text-lg">
             <PiShoppingBag className="text-xl" />
           </Link>
           <div
@@ -89,17 +95,17 @@ const UserNavbar: FC = () => {
               <div
                 onMouseEnter={() => setToggle(true)}
                 onMouseLeave={() => setToggle(false)}
-                className="flex items-center gap-3 p-1 rounded-lg hover:bg-slate-100 cursor-pointer relative z-50"
+                className="flex items-center gap-3 p-1 rounded-3xl hover:bg-slate-100 cursor-pointer relative z-50"
               >
                 <div className="h-8 aspect-square rounded-full mx-auto overflow-hidden">
                   {me.image ? (
-                    <img
+                    <ProgressiveImg
                       src={me.image_url}
                       className="w-full"
                       alt="User Image"
                     />
                   ) : (
-                    <img
+                    <ProgressiveImg
                       src={defaultUser}
                       className="w-full"
                       alt="User Image"
@@ -111,21 +117,21 @@ const UserNavbar: FC = () => {
                   id="user-menu"
                   onMouseEnter={() => setToggle(true)}
                   onClick={() => setToggle(false)}
-                  className={`absolute top-10 right-0 bg-white rounded-lg shadow overflow-hidden transition-all duration-700 ${
-                    !toggle ? "h-0" : "h-40"
+                  className={`absolute top-10 right-0 bg-white rounded-3xl shadow overflow-hidden transition-all duration-700 ${
+                    !toggle ? "h-0" : "h-48"
                   }`}
                 >
-                  <div className="grid gap-2 w-auto text-nowrap p-4">
+                  <div className="grid gap-2 w-auto text-nowrap p-3">
                     <div className="flex items-center gap-3 border-b pb-3 border-b-slate-300">
                       <div className="h-10 aspect-square rounded-full mx-auto overflow-hidden">
                         {me.image ? (
-                          <img
+                          <ProgressiveImg
                             src={me.image_url}
                             className="w-full"
                             alt="User Image"
                           />
                         ) : (
-                          <img
+                          <ProgressiveImg
                             src={defaultUser}
                             className="w-full"
                             alt="User Image"
@@ -137,7 +143,7 @@ const UserNavbar: FC = () => {
                         <div className="w-44 text-xs truncate">{me.email}</div>
                       </div>
                     </div>
-                    <div className="grid grid-cols-1 gap-2">
+                    <div className="grid grid-cols-1">
                       <NavLink to="/account/profile">
                         <CiUser className="text-lg" />
                         Akun Saya
@@ -174,7 +180,7 @@ const UserNavbar: FC = () => {
             )}
           </div>
           <div
-            className="md:hidden cursor-pointer rounded-lg hover:bg-slate-100 p-2"
+            className="md:hidden cursor-pointer rounded-3xl hover:bg-slate-100 p-2"
             onClick={() => setToggleMobile(true)}
           >
             <FaBars />
@@ -188,7 +194,7 @@ const UserNavbar: FC = () => {
       >
         <div className="p-3 lg:px-5 flex justify-between items-center border border-b-slate-100 mb-3">
           <Link to="/">
-            <img
+            <ProgressiveImg
               src={LogoFull}
               alt="Logo AFM"
               className="h-6"

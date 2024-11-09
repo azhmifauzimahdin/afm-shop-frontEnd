@@ -93,7 +93,7 @@ const ChangePassword: FC = () => {
         {errorMessage}
       </Alert>
       <form onSubmit={formik.handleSubmit}>
-        <div className="grid gap-3 w-full md:w-2/3">
+        <div className="grid gap-3 w-full md:w-6/12">
           <Input
             label="Kata Sandi Lama"
             type="password"

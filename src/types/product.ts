@@ -34,7 +34,7 @@ export interface ProductsReponse {
   success: boolean;
   message: string;
   data: {
-    products: DataResponse;
+    products: [Product];
   };
 }
 

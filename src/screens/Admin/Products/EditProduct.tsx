@@ -27,7 +27,7 @@ interface FormValues {
 const EditProduct: FC = () => {
   DocumentTitle("Edit Produk");
   const [loading, setLoading] = useState<boolean>(false);
-  const [loadingRender, setLoadingRender] = useState<boolean>(false);
+  const [loadingRender, setLoadingRender] = useState<boolean>(true);
   const [editImages, setEditImages] = useState<any[]>([]);
   const [deleteImages, setDeleteImages] = useState<any[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -52,7 +52,6 @@ const EditProduct: FC = () => {
       formik.setFieldValue("price", response.data.data.product.price);
       formik.setFieldValue("discount", response.data.data.product.discount);
       setEditImages(response.data.data.product.images);
-      //   formik.setFieldValue("images", response.data.data.product.images);
       setLoadingRender(false);
     } catch (error) {
       console.log(error);
@@ -157,10 +156,14 @@ const EditProduct: FC = () => {
           <Link to="/admin/dashboard" className="text-blue-700 me-1.5">
             Home
           </Link>
+          <span className="me-1.5">/</span>
+          <Link to="/admin/products" className="text-blue-700 me-1.5">
+            Produk
+          </Link>
           / Edit Produk
         </div>
       </div>
-      <div className="bg-white rounded shadow p-4">
+      <div className="bg-white rounded-xl shadow p-4">
         <form onSubmit={formik.handleSubmit} encType="multipart/form-data">
           <div className="grid md:grid-cols-3 gap-3 md:gap-10">
             <div className="md:col-span-2 grid gap-3 order-3 self-start">
@@ -194,7 +197,7 @@ const EditProduct: FC = () => {
                     : ""
                 }
               />
-              <div className="flex gap-3">
+              <div className="flex flex-col md:flex-row gap-3">
                 <InputGroup
                   label="HARGA"
                   type="number"

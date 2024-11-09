@@ -30,7 +30,7 @@ const Home: FC = () => {
 
   return (
     <div>
-      <CardList data={products.data} loading={loading} />
+      <CardList data={products} loading={loading} />
     </div>
   );
 };

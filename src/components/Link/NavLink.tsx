@@ -21,11 +21,11 @@ const NavLink: FC<InputProps> = (props) => {
   } = props;
   const style =
     type === "user"
-      ? `hover:text-orange cursor-pointer flex items-center gap-3 ${
-          active && "text-orange"
+      ? `py-2 px-4 rounded-3xl cursor-pointer flex items-center gap-3 ${
+          active ? "text-slate-100 bg-orange" : "hover:bg-slate-200"
         }`
-      : `flex items-center gap-3 p-2 text-gray-900 rounded-lg hover:bg-gray-100 hover:text-orange group ${
-          active && "text-orange bg-gray-100"
+      : `py-2 px-4 flex items-center gap-3 p-2 text-gray-900 rounded-3xl group ${
+          active ? "text-slate-100 bg-orange" : "hover:bg-slate-200"
         }`;
 
   return (

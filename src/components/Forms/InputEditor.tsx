@@ -43,7 +43,7 @@ const InputEditor: FC<InputProps> = (props) => {
       {loadingRender ? (
         <div>
           <Skeleton height={20} width={100} className="mb-2" />
-          <Skeleton height={100} />
+          <Skeleton height={100} borderRadius={24} />
         </div>
       ) : (
         <div>
