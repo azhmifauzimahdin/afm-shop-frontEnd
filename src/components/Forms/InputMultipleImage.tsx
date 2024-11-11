@@ -17,15 +17,16 @@ import "swiper/css/scrollbar";
 interface InputProps {
   label?: string;
   id: string;
-  value: any;
+  value?: any;
   name: string;
-  src: any;
+  src?: any;
   disabled?: boolean;
   loadingRender?: boolean;
   onChange?: any;
   errorMessage?: any;
   editImages?: any;
   onDelete?: any;
+  disableAddButton?: boolean;
 }
 
 const InputMultipleImage: FC<InputProps> = (props) => {
@@ -34,13 +35,14 @@ const InputMultipleImage: FC<InputProps> = (props) => {
     id,
     name,
     value,
-    src,
+    src = [],
     disabled,
     loadingRender,
     onChange,
     errorMessage,
     editImages,
     onDelete,
+    disableAddButton,
   } = props;
   const [previews, setPreview] = useState<any[]>([]);
   const [modal, setModal] = useState<boolean>(false);
@@ -48,7 +50,8 @@ const InputMultipleImage: FC<InputProps> = (props) => {
   const ref = useOutsideClick(() => setModal(false));
 
   useEffect(() => {
-    if (previews && previews !== src) {
+    console.log(src);
+    if (previews && src.length > 0 && previews !== src) {
       setPreview([...previews, ...src]);
     }
   }, [src]);
@@ -56,7 +59,7 @@ const InputMultipleImage: FC<InputProps> = (props) => {
   useEffect(() => {
     if (indexPreview > 0) setIndexPreview(indexPreview - 1);
     else setIndexPreview(0);
-    value(previews);
+    if (value) value(previews);
   }, [previews]);
 
   useEffect(() => {
@@ -440,33 +443,35 @@ const InputMultipleImage: FC<InputProps> = (props) => {
                   </div>
                 ))
               : null}
-            <label htmlFor={id} className="aspect-square">
-              <div
-                className={`w-full h-full border ${
-                  errorMessage ? "border-orange" : "border-gray-300"
-                }  rounded-lg flex justify-center items-center ${
-                  disabled
-                    ? "bg-slate-100"
-                    : "bg-gray-50 cursor-pointer hover:bg-slate-100"
-                }`}
-              >
-                <FaPlus
-                  className={`${
-                    errorMessage ? "text-orange" : "text-gray-600"
+            {!disableAddButton && (
+              <label htmlFor={id} className="aspect-square">
+                <div
+                  className={`w-full h-full border ${
+                    errorMessage ? "border-orange" : "border-gray-300"
+                  }  rounded-lg flex justify-center items-center ${
+                    disabled
+                      ? "bg-slate-100"
+                      : "bg-gray-50 cursor-pointer hover:bg-slate-100"
                   }`}
+                >
+                  <FaPlus
+                    className={`${
+                      errorMessage ? "text-orange" : "text-gray-600"
+                    }`}
+                  />
+                </div>
+                <input
+                  className="hidden"
+                  type="file"
+                  id={id}
+                  name={name}
+                  onChange={onChange}
+                  accept="image/*"
+                  disabled={disabled}
+                  multiple
                 />
-              </div>
-              <input
-                className="hidden"
-                type="file"
-                id={id}
-                name={name}
-                onChange={onChange}
-                accept="image/*"
-                // disabled={disabled}
-                multiple
-              />
-            </label>
+              </label>
+            )}
           </div>
           {errorMessage && (
             <div className="text-red-600 text-xs ml-3 mt-2">{errorMessage}</div>

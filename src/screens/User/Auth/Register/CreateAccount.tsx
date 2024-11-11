@@ -3,10 +3,11 @@ import { Button, Input, LoadingScreen } from "../../../../components";
 import { DocumentTitle } from "../../../../layouts";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import YupPassword from "yup-password";
 import { authService } from "../../../../services";
+import { updateMe } from "../../../../redux/actions/me";
 YupPassword(Yup);
 
 interface FormValues {
@@ -21,6 +22,7 @@ const CreateAccount: FC = () => {
   const [loading, setLoading] = useState(false);
   const [render, setRender] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (!me.email) {
@@ -48,7 +50,7 @@ const CreateAccount: FC = () => {
       setLoading(true);
       const request = { ...me, ...values };
       const response = await authService.createAccount(request);
-      console.log(response);
+      dispatch(updateMe(response.data.data.user));
       localStorage.setItem(
         "ACCESS_TOKEN",
         response.data.data.authorization.token
@@ -133,8 +135,7 @@ const CreateAccount: FC = () => {
               type="submit"
               color="primary"
               width="w-full"
-              disabled={loading}
-              loading
+              loading={loading}
             >
               BUAT AKUN
             </Button>

@@ -12,9 +12,10 @@ import { DocumentTitle } from "../../../layouts";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { productService } from "../../../services";
-import { ProductImage, ProductRequest } from "../../../types/product";
+import { Product, ProductImage, ProductRequest } from "../../../types/product";
 import { useDispatch, useSelector } from "react-redux";
 import { setMessage } from "../../../redux/actions/message";
+import { editProduct } from "../../../redux/actions/product";
 
 interface FormValues {
   title: string;
@@ -27,13 +28,14 @@ interface FormValues {
 const EditProduct: FC = () => {
   DocumentTitle("Edit Produk");
   const [loading, setLoading] = useState<boolean>(false);
-  const [loadingRender, setLoadingRender] = useState<boolean>(true);
+  const [loadingRender, setLoadingRender] = useState<boolean>(false);
   const [editImages, setEditImages] = useState<any[]>([]);
   const [deleteImages, setDeleteImages] = useState<any[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const idProduct = useSelector((state: any) => state.id.id);
+  const products = useSelector((state: any) => state.products.products);
 
   useEffect(() => {
     if (!idProduct) navigate("/admin/products");
@@ -41,22 +43,16 @@ const EditProduct: FC = () => {
   }, []);
 
   const loadData = async () => {
-    try {
-      setLoadingRender(true);
-      const response = await productService.editProduct(idProduct);
-      formik.setFieldValue("title", response.data.data.product.title);
-      formik.setFieldValue(
-        "description",
-        response.data.data.product.description
-      );
-      formik.setFieldValue("price", response.data.data.product.price);
-      formik.setFieldValue("discount", response.data.data.product.discount);
-      setEditImages(response.data.data.product.images);
-      setLoadingRender(false);
-    } catch (error) {
-      console.log(error);
-      setLoadingRender(false);
-    }
+    setLoadingRender(true);
+    const product = products.filter(
+      (product: Product) => product.id === idProduct
+    );
+    formik.setFieldValue("title", product[0].title);
+    formik.setFieldValue("description", product[0].description);
+    formik.setFieldValue("price", product[0].price);
+    formik.setFieldValue("discount", product[0].discount);
+    setEditImages(product[0].images);
+    setLoadingRender(false);
   };
 
   const validationSchema = Yup.object().shape({
@@ -118,6 +114,7 @@ const EditProduct: FC = () => {
         idProduct,
         formData as ProductRequest
       );
+      dispatch(editProduct(response.data.data.product));
       dispatch(setMessage(response.data.message));
       setLoading(false);
       navigate("/admin/products");

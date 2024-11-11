@@ -29,6 +29,7 @@ import {
   CreateProduct,
   EditProduct,
   Product,
+  ShowProduct,
 } from "./screens/Admin";
 
 const Router: FC = () => {
@@ -115,6 +116,7 @@ const Router: FC = () => {
                 element={<CreateProduct />}
               />
               <Route path="/admin/products/edit" element={<EditProduct />} />
+              <Route path="/admin/products/show" element={<ShowProduct />} />
             </Route>
           </Route>
         </Route>

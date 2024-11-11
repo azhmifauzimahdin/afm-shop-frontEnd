@@ -15,6 +15,7 @@ import { productService } from "../../../services";
 import { ProductRequest } from "../../../types/product";
 import { useDispatch } from "react-redux";
 import { setMessage } from "../../../redux/actions/message";
+import { addProduct } from "../../../redux/actions/product";
 
 interface FormValues {
   title: string;
@@ -74,6 +75,7 @@ const CreateProduct: FC = () => {
       const response = await productService.addProduct(
         values as ProductRequest
       );
+      dispatch(addProduct(response.data.data.product));
       dispatch(setMessage(response.data.message));
       setLoading(false);
       navigate("/admin/products");

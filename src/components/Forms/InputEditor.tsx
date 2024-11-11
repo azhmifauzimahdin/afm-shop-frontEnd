@@ -53,7 +53,7 @@ const InputEditor: FC<InputProps> = (props) => {
           <div
             className={`${disabled ? "bg-slate-100" : ""} ${
               errorMessage ? "error" : ""
-            }`}
+            } rounded-3xl`}
           >
             <EditorProvider>
               <Editor

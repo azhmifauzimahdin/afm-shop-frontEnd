@@ -9,6 +9,7 @@
 }
 .rsw-editor {
   border-radius: 1.2rem !important;
+  overflow: hidden !important;
 }
 
 .error .rsw-editor {

@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react";
-import { A, Alert, Button, Modal, Table } from "../../../components";
+import { Alert, Button, Modal, Table } from "../../../components";
 import { productService } from "../../../services";
 import { Question } from "../../../assets";
 import { FaEye, FaPen, FaTrash } from "react-icons/fa6";
@@ -10,30 +10,32 @@ import { DocumentTitle } from "../../../layouts";
 import { setMessage } from "../../../redux/actions/message";
 import { setID } from "../../../redux/actions/id";
 import { TableColumn } from "../../../components/Table/Table";
+import { setLoading } from "../../../redux/actions/loading";
 
 const Product: FC = () => {
   DocumentTitle("Produk");
   const products = useSelector((state: any) => state.products.products);
+  const loading = useSelector((state: any) => state.loading.loading);
   const message = useSelector((state: any) => state.message.message);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loadingButton, setLoadingButton] = useState<boolean>(false);
   const [visible, setVisible] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [id, setId] = useState<string>("");
 
   useEffect(() => {
-    getAllProducts();
+    if (products.length === 0) getAllProducts();
   }, []);
 
   const getAllProducts = async () => {
     try {
-      setLoading(true);
+      dispatch(setLoading(true));
       const response = await productService.getAll();
       dispatch(setProduct(response.data.data.products));
-      setLoading(false);
+      dispatch(setLoading(false));
     } catch (error) {
-      setLoading(false);
+      dispatch(setLoading(false));
       console.log(error);
     }
   };
@@ -63,9 +65,18 @@ const Product: FC = () => {
       render: (data: any) => {
         return (
           <div className="flex gap-1">
-            <A to={`/admin/products/${data.id}`} type="button">
+            <Button
+              type="button"
+              color="outline-primary"
+              size="sm"
+              className="p-2"
+              onClick={() => {
+                dispatch(setID(data.id));
+                navigate("show");
+              }}
+            >
               <FaEye />
-            </A>
+            </Button>
             <Button
               type="button"
               color="outline-primary"
@@ -102,13 +113,16 @@ const Product: FC = () => {
 
   const handleDelete = async () => {
     try {
+      setLoadingButton(true);
       const response = await productService.deleteProduct(id);
       dispatch(setMessage(response.data.message));
       dispatch(delProduct(id));
+      setLoadingButton(false);
       setVisible(false);
     } catch (error: any) {
       setErrorMessage(error.response.data.message);
       setVisible(false);
+      setLoadingButton(false);
     }
   };
 
@@ -139,8 +153,7 @@ const Product: FC = () => {
             type="button"
             color="primary"
             onClick={handleDelete}
-            loading={loading}
-            disabled={loading}
+            loading={loadingButton}
           >
             Hapus
           </Button>

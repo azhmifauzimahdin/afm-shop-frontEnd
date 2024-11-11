@@ -15,6 +15,18 @@ const reducer = (
         ...state,
         products: payload,
       };
+    case "ADDPRODUCT":
+      return {
+        ...state,
+        products: [payload, ...state.products],
+      };
+    case "EDITPRODUCT":
+      return {
+        ...state,
+        products: state.products.map((product: Product) =>
+          product.id === payload.id ? payload : product
+        ),
+      };
     case "DELPRODUCT":
       return {
         ...state,

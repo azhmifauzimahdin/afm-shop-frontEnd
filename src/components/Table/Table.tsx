@@ -34,6 +34,8 @@ const Table: FC<InputProps> = (props) => {
   const [tableData, setTableData] = useState<any[][]>([]);
   const [tableCurrentPage, setTableCurrentPage] = useState<number>(0);
   const [tablePerPage, setTablePerPage] = useState<number>(10);
+  const [sortDireaction, setSortDirection] = useState<"asc" | "desc" | "">("");
+  const [sortColumn, setSortColumn] = useState<string>("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -66,6 +68,8 @@ const Table: FC<InputProps> = (props) => {
   };
 
   const sort = (direction: "asc" | "desc", property: any) => {
+    setSortDirection(direction);
+    setSortColumn(property);
     const baseDatas = [...data];
     const sortedDatas = baseDatas.sort((a, b) => {
       if (direction === "asc") return a[property] > b[property] ? 1 : -1;
@@ -141,12 +145,22 @@ const Table: FC<InputProps> = (props) => {
                           <div>
                             <MdArrowDropUp
                               onClick={() => sort("asc", column.sort)}
-                              className="-mb-1.5 text-slate-400"
+                              className={`-mb-1.5 ${
+                                column.sort === sortColumn &&
+                                sortDireaction === "asc"
+                                  ? "text-slate-600"
+                                  : "text-slate-400"
+                              } hover:text-slate-600`}
                               cursor="pointer"
                             />
                             <MdArrowDropDown
                               onClick={() => sort("desc", column.sort)}
-                              className="text-slate-400"
+                              className={`${
+                                column.sort === sortColumn &&
+                                sortDireaction === "desc"
+                                  ? "text-slate-600"
+                                  : "text-slate-400"
+                              } hover:text-slate-600`}
                               cursor="pointer"
                             />
                           </div>
@@ -229,12 +243,19 @@ const Table: FC<InputProps> = (props) => {
           {loading ? (
             <Skeleton height={30} width={120} borderRadius={24} />
           ) : (
-            <Select
-              id="perpage"
-              name="perpage"
-              data={ammontPerpage}
-              onChange={(e: any) => setTablePerPage(e.target.value)}
-            />
+            <>
+              {tableData.length > 0 ? (
+                <Select
+                  id="perpage"
+                  name="perpage"
+                  data={ammontPerpage}
+                  onChange={(e: any) => {
+                    setTableCurrentPage(0);
+                    setTablePerPage(e.target.value);
+                  }}
+                />
+              ) : null}
+            </>
           )}
         </div>
         {loading ? (
@@ -245,8 +266,11 @@ const Table: FC<InputProps> = (props) => {
               <ReactPaginate
                 breakLabel="..."
                 nextLabel={<MdKeyboardArrowRight />}
-                onPageChange={(e) => setTableCurrentPage(e.selected)}
+                onPageChange={(e) => {
+                  setTableCurrentPage(e.selected);
+                }}
                 marginPagesDisplayed={1}
+                forcePage={tableCurrentPage}
                 pageRangeDisplayed={2}
                 pageCount={tableData.length}
                 previousLabel={<MdKeyboardArrowLeft />}

@@ -29,6 +29,7 @@ const ForgetPassword: FC = () => {
 
   const handleSubmit = async (values: FormValues) => {
     try {
+      setErrorMessage("");
       setLoading(true);
       const response = await authService.forgetPassword(values);
       dispatch(updateMe(response.data.data));
@@ -87,8 +88,7 @@ const ForgetPassword: FC = () => {
               type="submit"
               color="primary"
               width="w-full"
-              disabled={loading}
-              loading
+              loading={loading}
             >
               BERIKUTNYA
             </Button>

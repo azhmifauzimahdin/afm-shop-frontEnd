@@ -114,8 +114,7 @@ const Login: FC = () => {
               type="submit"
               color="primary"
               width="w-full"
-              disabled={loading}
-              loading
+              loading={loading}
             >
               LOGIN
             </Button>

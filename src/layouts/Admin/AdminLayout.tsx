@@ -6,9 +6,11 @@ import { NavLink, ProgressiveImg } from "../../components";
 import { useClickOutside } from "../../hooks/useClickOutside";
 import { FaBars } from "react-icons/fa6";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
-import { authAdminService } from "../../services";
+import { authAdminService, productService } from "../../services";
 import { deleteAdmin } from "../../redux/actions/admin";
 import { MdOutlineDashboard } from "react-icons/md";
+import { setLoading } from "../../redux/actions/loading";
+import { setProduct } from "../../redux/actions/product";
 
 const AdminLayout: FC = () => {
   const me = useSelector((state: any) => state.admin.admin);
@@ -146,7 +148,18 @@ const AdminLayout: FC = () => {
                 to="/admin/products"
                 type="admin"
                 active={location === "products"}
-                onClick={() => setToggleSidebar(false)}
+                onClick={async () => {
+                  try {
+                    dispatch(setLoading(true));
+                    const response = await productService.getAll();
+                    dispatch(setProduct(response.data.data.products));
+                    dispatch(setLoading(false));
+                  } catch (error) {
+                    dispatch(setLoading(false));
+                    console.log(error);
+                  }
+                  setToggleSidebar(false);
+                }}
               >
                 <CiShop className="text-lg" />
                 Produk
