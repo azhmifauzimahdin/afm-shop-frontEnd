@@ -11,7 +11,7 @@ const AuthLayout: FC = () => {
 
   return (
     <>
-      <div className="container mx-auto min-h-screen flex flex-col gap-5 justify-center items-center p-3">
+      <div className="container bg-slate-100 mx-auto min-h-screen flex flex-col gap-5 justify-center items-center p-3">
         <div className="bg-white rounded-3xl shadow-md px-5 py-8 w-full sm:w-96">
           {location.pathname !== "/admin/login" ? (
             <Link to="/">

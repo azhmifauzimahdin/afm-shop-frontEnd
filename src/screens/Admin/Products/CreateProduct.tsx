@@ -16,6 +16,7 @@ import { ProductRequest } from "../../../types/product";
 import { useDispatch } from "react-redux";
 import { setMessage } from "../../../redux/actions/message";
 import { addProduct } from "../../../redux/actions/product";
+import { FaPercent, FaRupiahSign } from "react-icons/fa6";
 
 interface FormValues {
   title: string;
@@ -116,7 +117,7 @@ const CreateProduct: FC = () => {
           / Tambah Produk
         </div>
       </div>
-      <div className="bg-white rounded shadow p-4">
+      <div className="bg-white rounded-xl shadow p-4">
         <form onSubmit={formik.handleSubmit} encType="multipart/form-data">
           <div className="grid md:grid-cols-3 gap-3 md:gap-10">
             <div className="md:col-span-2 grid gap-3 order-3 self-start">
@@ -169,7 +170,7 @@ const CreateProduct: FC = () => {
                       ? formik.errors.price
                       : ""
                   }
-                  prepend={<p>Rp.</p>}
+                  prepend={<FaRupiahSign />}
                 />
                 <InputGroup
                   label="DISKON"
@@ -180,7 +181,7 @@ const CreateProduct: FC = () => {
                   onChange={formik.handleChange}
                   disabled={loading}
                   width="w-[74px]"
-                  append={<p>%</p>}
+                  append={<FaPercent />}
                   errorMessage={
                     formik.touched.discount && formik.errors.discount
                       ? formik.errors.discount

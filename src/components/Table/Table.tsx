@@ -79,7 +79,6 @@ const Table: FC<InputProps> = (props) => {
     initiateTable(sortedDatas);
   };
 
-  const countloader: number[] = [1, 2, 3, 4, 5];
   const ammontPerpage: any[] = [
     { label: "10 / page", value: 10 },
     { label: "25 / page", value: 25 },
@@ -175,8 +174,8 @@ const Table: FC<InputProps> = (props) => {
           <tbody className="relative">
             {loading ? (
               <>
-                {countloader.map((data) => (
-                  <tr className="odd:bg-slate-50 even:bg-gray-100" key={data}>
+                {[...Array(5)].map((_, index) => (
+                  <tr className="odd:bg-slate-50 even:bg-gray-100" key={index}>
                     {columns.map((column) => (
                       <td key={column.title}>
                         <Skeleton />

@@ -56,7 +56,7 @@ const Primary: FC<InputProps> = (props) => {
           className={`relative rounded-3xl font-medium group ${
             color !== "link"
               ? `${
-                  size === "sm" ? "p-2" : "px-5 py-2.5"
+                  size === "sm" ? "px-2 py-1 text-sm" : "px-5 py-2.5"
                 } shadow disabled:bg-slate-200 focus:outline-none focus:ring-4`
               : ""
           } ${width} ${classColor} ${className} `}

@@ -35,7 +35,7 @@ const UserSidebar: FC<InputProps> = (props) => {
         <>
           <div className="flex items-center gap-3 border-b pb-3 border-b-slate-200 mb-5">
             <div className="h-10 aspect-square rounded-full overflow-hidden">
-              {me.image ? (
+              {me.image_url ? (
                 <ProgressiveImg
                   src={me.image_url}
                   className="w-full"

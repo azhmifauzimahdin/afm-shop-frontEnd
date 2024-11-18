@@ -1,3 +1,5 @@
+import { User } from "./user";
+
 export interface ProductRequest {
   title: string;
   description: string;
@@ -13,19 +15,34 @@ export interface Product {
   price: number;
   discount: number;
   sold: number;
-  created_at: string;
-  updated_at: string;
+  stock: number;
   price_now: number;
   format_price: number;
-  images: [ProductImage];
+  images: [Image];
+  rating: Rating;
 }
 
-export interface ProductImage {
+export interface Rating {
+  rate: number;
+  specific_rate: number[];
+  percentage_rate: number[];
+  reviews: [Review];
+}
+
+export interface Review {
   id: string;
-  product_id: string;
-  name: string;
-  created_at: string;
-  updated_at: string;
+  title: string;
+  review: string;
+  rating: number;
+  date: string;
+  images: [Image];
+  user: User;
+}
+
+export interface Image {
+  id: string;
+  title: string;
+  size: number;
   image_url: string;
 }
 
@@ -68,6 +85,6 @@ export interface ProductImageReponse {
   success: boolean;
   message: string;
   data: {
-    image: ProductImage;
+    image: Image;
   };
 }

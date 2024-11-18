@@ -47,6 +47,7 @@ const UserNavbar: FC = () => {
       const response = await productService.getAll(search);
       dispatch(setProduct(response.data.data.products));
       dispatch(setLoading(false));
+      navigate("/");
     } catch (error) {
       dispatch(setLoading(false));
       console.log(error);
@@ -54,10 +55,10 @@ const UserNavbar: FC = () => {
   };
 
   return (
-    <div className="fixed top-0 z-50 md:relative w-full md:h-full bg-white shadow-sm">
+    <div className="fixed top-0 z-50 w-full bg-white shadow">
       <nav
         id="main-navbar"
-        className="container mx-auto p-3 lg:px-5 flex items-center gap-6 md:gap-10 transition-all duration-500"
+        className="container mx-auto p-3 lg:px-20 flex items-center gap-6 md:gap-10 transition-all duration-500"
       >
         <Link to="/" className="hidden sm:block w-full">
           <ProgressiveImg src={LogoFull} alt="Logo AFM" className="h-8" />
@@ -98,7 +99,7 @@ const UserNavbar: FC = () => {
                 className="flex items-center gap-3 p-1 rounded-3xl hover:bg-slate-100 cursor-pointer relative z-50"
               >
                 <div className="h-8 aspect-square rounded-full mx-auto overflow-hidden">
-                  {me.image ? (
+                  {me.image_url ? (
                     <ProgressiveImg
                       src={me.image_url}
                       className="w-full"
@@ -124,7 +125,7 @@ const UserNavbar: FC = () => {
                   <div className="grid gap-2 w-auto text-nowrap p-3">
                     <div className="flex items-center gap-3 border-b pb-3 border-b-slate-300">
                       <div className="h-10 aspect-square rounded-full mx-auto overflow-hidden">
-                        {me.image ? (
+                        {me.image_url ? (
                           <ProgressiveImg
                             src={me.image_url}
                             className="w-full"

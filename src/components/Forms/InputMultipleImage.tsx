@@ -50,6 +50,7 @@ const InputMultipleImage: FC<InputProps> = (props) => {
   const ref = useOutsideClick(() => setModal(false));
 
   useEffect(() => {
+    console.log("previews: ", previews);
     console.log(src);
     if (previews && src.length > 0 && previews !== src) {
       setPreview([...previews, ...src]);
@@ -84,7 +85,7 @@ const InputMultipleImage: FC<InputProps> = (props) => {
                 <div className="w-full text-center px-6">
                   <div className="truncate">
                     {editImages && indexPreview < editImages.length
-                      ? editImages[indexPreview]?.name
+                      ? editImages[indexPreview]?.title
                       : previews[
                           indexPreview - (editImages ? editImages.length : 0)
                         ]?.name}
@@ -127,9 +128,14 @@ const InputMultipleImage: FC<InputProps> = (props) => {
                   className="p-1"
                   onSlideChange={(index) => setIndexPreview(index.activeIndex)}
                   speed={1000}
-                  navigation={false}
+                  navigation={true}
                   breakpoints={{
-                    1280: {
+                    320: {
+                      navigation: {
+                        enabled: false,
+                      },
+                    },
+                    768: {
                       navigation: {
                         enabled: true,
                       },
@@ -243,7 +249,12 @@ const InputMultipleImage: FC<InputProps> = (props) => {
                               />
                               <IoMdCloseCircle
                                 onClick={() => {
-                                  if (previews.length === 1) {
+                                  if (
+                                    previews.length === 1 &&
+                                    (editImages
+                                      ? editImages.length === 0
+                                      : true)
+                                  ) {
                                     setModal(false);
                                   }
                                   const newData = [

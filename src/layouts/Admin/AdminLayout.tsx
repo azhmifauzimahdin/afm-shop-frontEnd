@@ -1,7 +1,7 @@
 import { FC, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { defaultUser, LogoFull } from "../../assets";
-import { CiLogout, CiShop, CiUser } from "react-icons/ci";
+import { CiLock, CiLogout, CiShop, CiUser } from "react-icons/ci";
 import { NavLink, ProgressiveImg } from "../../components";
 import { useClickOutside } from "../../hooks/useClickOutside";
 import { FaBars } from "react-icons/fa6";
@@ -17,11 +17,13 @@ const AdminLayout: FC = () => {
   const [toggleNavbar, setToggleNavbar] = useState<boolean>(false);
   const [toggleSidebar, setToggleSidebar] = useState<boolean>(false);
   const refNavbar = useRef<HTMLDivElement>(null);
+  const refSidebar = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation().pathname.split("/")[2];
 
   useClickOutside(refNavbar, () => setToggleNavbar(false));
+  useClickOutside(refSidebar, () => setToggleSidebar(false));
 
   const handleLogout = async () => {
     try {
@@ -35,12 +37,13 @@ const AdminLayout: FC = () => {
   };
 
   return (
-    <div className="relative">
+    <div className="bg-slate-100 min-h-screen relative">
       <nav className="fixed top-0 w-full bg-white border-b border-gray-200 z-40">
         <div className="px-3 py-2 lg:px-5 lg:pl-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center justify-start rtl:justify-end">
               <div
+                ref={refSidebar}
                 className="inline-flex items-center p-1.5 rounded-lg sm:hidden cursor-pointer hover:bg-white text-xl text-slate-700 hover:text-slate-600"
                 onClick={() => setToggleSidebar(!toggleSidebar)}
               >
@@ -124,6 +127,7 @@ const AdminLayout: FC = () => {
 
       <aside
         id="logo-sidebar"
+        ref={refSidebar}
         className={`fixed top-14 pt-3 left-0 z-30 w-64 h-screen transition-transform duration-700 -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 ${
           toggleSidebar ? "transform-none" : "-translate-x-full"
         }`}
@@ -149,6 +153,7 @@ const AdminLayout: FC = () => {
                 type="admin"
                 active={location === "products"}
                 onClick={async () => {
+                  setToggleSidebar(false);
                   try {
                     dispatch(setLoading(true));
                     const response = await productService.getAll();
@@ -158,18 +163,28 @@ const AdminLayout: FC = () => {
                     dispatch(setLoading(false));
                     console.log(error);
                   }
-                  setToggleSidebar(false);
                 }}
               >
                 <CiShop className="text-lg" />
                 Produk
               </NavLink>
             </li>
+            <li>
+              <NavLink
+                to="/admin/change-password"
+                type="admin"
+                active={location === "change-password"}
+                onClick={() => setToggleSidebar(false)}
+              >
+                <CiLock className="text-lg" />
+                Ganti Kata Sandi
+              </NavLink>
+            </li>
           </ul>
         </div>
       </aside>
 
-      <div className="p-3 sm:ml-64 pt-16">
+      <div className="p-3 sm:ml-64 pt-16 ">
         <Outlet />
       </div>
     </div>

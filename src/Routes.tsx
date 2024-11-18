@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import {
-  ChangePassword,
+  ChangePassword as ChangePasswordUser,
   CreateAccount,
   Email,
   ForgetPassword,
@@ -10,6 +10,7 @@ import {
   Profile,
   Register,
   ResetPassword,
+  ShowProduct,
   VerificationCode,
   VerificationCodeChangeEmail,
   VerificationCodeForgetPassword,
@@ -26,10 +27,11 @@ import {
 } from "./ProtectedRoute";
 import {
   AdminLogin,
+  ChangePassword,
   CreateProduct,
   EditProduct,
   Product,
-  ShowProduct,
+  ShowProduct as ShowProductAdmin,
 } from "./screens/Admin";
 
 const Router: FC = () => {
@@ -70,6 +72,7 @@ const Router: FC = () => {
           </Route>
           <Route element={<UserLayout />}>
             <Route path="/" element={<Home />} />
+            <Route path="/product/:idProduct" element={<ShowProduct />} />
             <Route
               element={
                 <AuthenticateUser isAuthenticated={isAuthenticateUser} />
@@ -80,7 +83,7 @@ const Router: FC = () => {
                 <Route path="/account/profile/email" element={<Email />} />
                 <Route
                   path="/account/change-password"
-                  element={<ChangePassword />}
+                  element={<ChangePasswordUser />}
                 />
               </Route>
             </Route>
@@ -116,7 +119,14 @@ const Router: FC = () => {
                 element={<CreateProduct />}
               />
               <Route path="/admin/products/edit" element={<EditProduct />} />
-              <Route path="/admin/products/show" element={<ShowProduct />} />
+              <Route
+                path="/admin/products/show"
+                element={<ShowProductAdmin />}
+              />
+              <Route
+                path="/admin/change-password"
+                element={<ChangePassword />}
+              />
             </Route>
           </Route>
         </Route>

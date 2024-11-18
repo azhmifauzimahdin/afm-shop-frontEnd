@@ -157,7 +157,7 @@ const Profile: FC = () => {
           </div>
           <div className="flex flex-col items-center justify-center gap-3 self-start pt-11 order-2 md:order-3 mb-5">
             <div className="w-1/3 aspect-square rounded-full overflow-hidden">
-              {me.image ? (
+              {me.image_url ? (
                 <img
                   src={
                     preview === null

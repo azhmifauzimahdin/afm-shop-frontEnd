@@ -38,6 +38,8 @@ const ChangePassword: FC = () => {
   });
 
   const handleSubmit = async (values: FormValues) => {
+    setMessage("");
+    setErrorMessage([]);
     try {
       setLoading(true);
       const response = await userService.changePassword(
@@ -46,9 +48,8 @@ const ChangePassword: FC = () => {
       dispatch(updateUser(response.data.data));
       setMessage(response.data.message);
       setLoading(false);
+      formik.resetForm();
     } catch (error: any) {
-      console.log(error);
-
       setErrorMessage([error.response.data.data?.errors]);
       setErrorMessage((errorMessage: any) => [
         ...errorMessage,
@@ -64,7 +65,6 @@ const ChangePassword: FC = () => {
       ]);
       setLoading(false);
     }
-    formik.resetForm();
   };
 
   const formik = useFormik({

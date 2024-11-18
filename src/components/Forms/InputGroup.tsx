@@ -12,10 +12,11 @@ interface InputProps {
   disabled?: boolean;
   loadingRender?: boolean;
   value?: string | number;
-  defaultValue?: string;
+  defaultValue?: any;
   onChange?: (e: any) => void;
   errorMessage?: any;
   width?: string;
+  inputStyle?: string;
 }
 
 const InputGroup: FC<InputProps> = (props) => {
@@ -30,16 +31,18 @@ const InputGroup: FC<InputProps> = (props) => {
     disabled,
     loadingRender,
     value,
+    defaultValue,
     onChange,
     errorMessage,
     width,
+    inputStyle,
   } = props;
 
   return (
     <>
       {loadingRender ? (
         <div className={`grow`}>
-          <Skeleton height={20} width={100} className="mb-2" />
+          {label ? <Skeleton height={20} width={100} className="mb-2" /> : null}
           {width ? (
             <Skeleton height={36} width={width} borderRadius={24} />
           ) : (
@@ -61,20 +64,24 @@ const InputGroup: FC<InputProps> = (props) => {
               placeholder={placeholder}
               disabled={disabled}
               value={value}
+              defaultValue={defaultValue}
               onChange={onChange}
               className={`px-3 disabled:bg-slate-100 bg-gray-50 border ${
                 errorMessage ? "border-orange" : "border-gray-300"
-              } rounded-3xl w-full p-2.5 ${prepend ? "ps-10" : "pe-10"}`}
+              } rounded-3xl w-full p-2.5 ${prepend ? "ps-10" : ""} ${
+                append ? "pe-10" : ""
+              } ${inputStyle ? inputStyle : ""}`}
             />
             {prepend ? (
-              <div className="absolute start-3 bottom-2.5 text-slate-600">
+              <div className="absolute start-3 top-1/3 text-slate-600">
                 {prepend}
               </div>
-            ) : (
-              <div className="absolute end-3 bottom-2.5 text-slate-600">
+            ) : null}
+            {append ? (
+              <div className="absolute end-3 top-1/3 text-slate-600">
                 {append}
               </div>
-            )}
+            ) : null}
           </div>
           {errorMessage && (
             <div className="text-red-600 text-xs ml-3 mt-1">{errorMessage}</div>

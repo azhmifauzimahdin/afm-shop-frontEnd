@@ -10,3 +10,4 @@ export { default as Email } from "./Account/Email";
 export { default as VerificationCodeChangeEmail } from "./Account/VerificationCode";
 export { default as ChangePassword } from "./Account/ChangePassword";
 export { default as Home } from "./Home";
+export { default as ShowProduct } from "./Products/ShowProduct";

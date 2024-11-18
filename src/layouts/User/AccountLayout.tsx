@@ -10,7 +10,7 @@ const AccountLayout: FC = () => {
       <div className="p-3 md:grow-0 hidden md:block">
         <UserSidebar me={me} />
       </div>
-      <div className="grow bg-white rounded-3xl shadow p-3 md:p-5">
+      <div className="grow bg-white rounded-3xl md:shadow p-3 md:p-5">
         <Outlet />
       </div>
     </div>

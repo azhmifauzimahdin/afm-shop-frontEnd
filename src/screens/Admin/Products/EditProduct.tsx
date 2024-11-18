@@ -16,6 +16,7 @@ import { Product, ProductImage, ProductRequest } from "../../../types/product";
 import { useDispatch, useSelector } from "react-redux";
 import { setMessage } from "../../../redux/actions/message";
 import { editProduct } from "../../../redux/actions/product";
+import { FaPercent, FaRupiahSign } from "react-icons/fa6";
 
 interface FormValues {
   title: string;
@@ -211,7 +212,7 @@ const EditProduct: FC = () => {
                       ? formik.errors.price
                       : ""
                   }
-                  prepend={<p>Rp.</p>}
+                  prepend={<FaRupiahSign />}
                 />
                 <InputGroup
                   label="DISKON"
@@ -223,7 +224,7 @@ const EditProduct: FC = () => {
                   disabled={loading}
                   loadingRender={loadingRender}
                   width="w-[74px]"
-                  append={<p>%</p>}
+                  append={<FaPercent />}
                   errorMessage={
                     formik.touched.discount && formik.errors.discount
                       ? formik.errors.discount
@@ -249,6 +250,7 @@ const EditProduct: FC = () => {
                   }}
                   value={(data: any) => {
                     formik.setFieldValue("images", data);
+                    console.log("value :", data);
                   }}
                   src={formik.values.images}
                   errorMessage={
