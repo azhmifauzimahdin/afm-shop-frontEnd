@@ -6,6 +6,7 @@ import products from "./product";
 import admin from "./admin";
 import loading from "./loading";
 import message from "./message";
+import errorMessage from "./errorMessage";
 import id from "./id";
 
 export default combineReducers({
@@ -15,5 +16,6 @@ export default combineReducers({
   admin,
   loading,
   message,
+  errorMessage,
   id,
 });

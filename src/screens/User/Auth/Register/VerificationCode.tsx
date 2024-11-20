@@ -85,18 +85,10 @@ const VerificationCode: FC = () => {
       <h1 className="text-center text-2xl font-bold mb-1">
         Masukan Kode Verifikasi
       </h1>
-      <Alert
-        type="danger"
-        hidden={messageError ? false : true}
-        className="text-center"
-      >
+      <Alert type="danger" hidden={messageError ? false : true}>
         {messageError}
       </Alert>
-      <Alert
-        type="success"
-        hidden={message ? false : true}
-        className="text-center"
-      >
+      <Alert type="success" hidden={message ? false : true}>
         {message} ke <span className="font-medium">{me.email}</span>
       </Alert>
       <p className="mb-3 text-slate-600 text-center">

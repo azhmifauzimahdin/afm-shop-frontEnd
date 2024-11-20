@@ -1,7 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
-  Alert,
   Button,
   Input,
   InputEditor,
@@ -12,11 +11,12 @@ import { DocumentTitle } from "../../../layouts";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { productService } from "../../../services";
-import { Product, ProductImage, ProductRequest } from "../../../types/product";
+import { Image, Product, ProductRequest } from "../../../types/product";
 import { useDispatch, useSelector } from "react-redux";
 import { setMessage } from "../../../redux/actions/message";
 import { editProduct } from "../../../redux/actions/product";
 import { FaPercent, FaRupiahSign } from "react-icons/fa6";
+import { setErrorMessage } from "../../../redux/actions/errorMessage";
 
 interface FormValues {
   title: string;
@@ -32,7 +32,6 @@ const EditProduct: FC = () => {
   const [loadingRender, setLoadingRender] = useState<boolean>(false);
   const [editImages, setEditImages] = useState<any[]>([]);
   const [deleteImages, setDeleteImages] = useState<any[]>([]);
-  const [errorMessage, setErrorMessage] = useState<string>("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const idProduct = useSelector((state: any) => state.id.id);
@@ -92,13 +91,13 @@ const EditProduct: FC = () => {
   });
 
   const handleSubmit = async (values: FormValues) => {
-    setErrorMessage("");
+    dispatch(setErrorMessage([]));
     if (deleteImages.length > 0) {
       deleteImages.map(async (id: string) => {
         try {
           await productService.deleteProductImage(id);
         } catch (error) {
-          setErrorMessage("Terjadi kesalahan");
+          dispatch(setErrorMessage(["Terjadi kesalahan"]));
           loadData();
           console.log(error);
         }
@@ -120,7 +119,7 @@ const EditProduct: FC = () => {
       setLoading(false);
       navigate("/admin/products");
     } catch (error: any) {
-      setErrorMessage("Terjadi kesalahan");
+      dispatch(setErrorMessage(["Terjadi kesalahan"]));
       setLoading(false);
       console.log(error);
     }
@@ -139,15 +138,12 @@ const EditProduct: FC = () => {
   });
 
   const handleDelete = async (id: string) => {
-    setEditImages(editImages.filter((data: ProductImage) => data.id !== id));
+    setEditImages(editImages.filter((data: Image) => data.id !== id));
     setDeleteImages([...deleteImages, id]);
   };
 
   return (
     <>
-      <Alert type="danger" hidden={errorMessage ? false : true}>
-        {errorMessage}
-      </Alert>
       <div className="flex flex-col gap-1 md:flex-row md:justify-between md:items-center mb-4">
         <div className="font-medium text-2xl">Edit Produk</div>
         <div className="text-xs md:text-sm">

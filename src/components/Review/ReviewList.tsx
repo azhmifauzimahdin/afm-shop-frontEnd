@@ -41,7 +41,7 @@ const ReviewList: FC<InputProps> = (props) => {
 
   return (
     <>
-      {reviews ? (
+      {data.reviews && data.reviews.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <div>
             <div className="flex justify-center items-center gap-2 mb-3">
@@ -119,7 +119,7 @@ const ReviewList: FC<InputProps> = (props) => {
           </div>
           <div className="md:col-span-3">
             <div className="flex flex-col gap-3">
-              {reviews.length > 0 ? (
+              {reviews && reviews.length > 0 ? (
                 reviews.map((review, index) => (
                   <Review data={review} key={index} />
                 ))

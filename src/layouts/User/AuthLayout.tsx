@@ -1,16 +1,23 @@
 import { FC } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { LogoFull } from "../../assets";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { deleteMe } from "../../redux/actions/me";
-import { A, ProgressiveImg } from "../../components";
+import { A, Alert, ProgressiveImg } from "../../components";
 
 const AuthLayout: FC = () => {
+  const errorMessage = useSelector(
+    (state: any) => state.errorMessage.errorMessage
+  );
+
   const location = useLocation();
   const dispatch = useDispatch();
 
   return (
     <>
+      <Alert type="danger" hidden={errorMessage.length > 0 ? false : true}>
+        {errorMessage}
+      </Alert>
       <div className="container bg-slate-100 mx-auto min-h-screen flex flex-col gap-5 justify-center items-center p-3">
         <div className="bg-white rounded-3xl shadow-md px-5 py-8 w-full sm:w-96">
           {location.pathname !== "/admin/login" ? (

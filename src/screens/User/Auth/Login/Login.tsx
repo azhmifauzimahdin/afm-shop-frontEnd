@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
 import { DocumentTitle } from "../../../../layouts";
-import { Alert, Button, Input, A } from "../../../../components";
+import { Button, Input, A } from "../../../../components";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -10,6 +10,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useGoogleLogin } from "@react-oauth/google";
 import { logoGoogle } from "../../../../assets/index";
 import { updateMe } from "../../../../redux/actions/me";
+import {
+  addErrorMessage,
+  setErrorMessage,
+} from "../../../../redux/actions/errorMessage";
 
 interface FormValues {
   email: string;
@@ -19,14 +23,13 @@ interface FormValues {
 const Login: FC = () => {
   DocumentTitle("Login");
   const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage]: any[] = useState([]);
   const navigate = useNavigate();
   const me = useSelector((state: any) => state.me.me);
   const dispatch = useDispatch();
 
   const handleSubmitForm = (e: any) => {
     e.preventDefault();
-    setErrorMessage([]);
+    dispatch(setErrorMessage([]));
     formik.handleSubmit();
   };
 
@@ -50,15 +53,9 @@ const Login: FC = () => {
       setLoading(false);
       navigate("/");
     } catch (error: any) {
-      setErrorMessage([error.response.data.data?.errors]);
-      setErrorMessage((errorMessage: any) => [
-        ...errorMessage,
-        error.response.data.data?.email,
-      ]);
-      setErrorMessage((errorMessage: any) => [
-        ...errorMessage,
-        error.response.data.data?.password,
-      ]);
+      dispatch(setErrorMessage([error.response.data.data?.errors]));
+      dispatch(addErrorMessage(error.response.data.data?.email));
+      dispatch(addErrorMessage(error.response.data.data?.password));
       setLoading(false);
       formik.resetForm();
     }
@@ -75,6 +72,7 @@ const Login: FC = () => {
 
   const login = useGoogleLogin({
     onSuccess: async (codeResponse) => {
+      dispatch(setErrorMessage([]));
       try {
         setLoading(true);
         const response = await authService.userGoogle(
@@ -89,7 +87,7 @@ const Login: FC = () => {
         setLoading(false);
         navigate("/");
       } catch (error: any) {
-        setErrorMessage([error.response.data.data.errors]);
+        dispatch(setErrorMessage([error.response.data.data.errors]));
       }
     },
     onError: (error) => console.log("Login Failed:", error),
@@ -101,9 +99,6 @@ const Login: FC = () => {
       <p className="mb-3 text-slate-500 text-center">
         Silakan login dan mulai beberlanja
       </p>
-      <Alert type="danger" hidden={errorMessage.length > 0 ? false : true}>
-        {errorMessage}
-      </Alert>
       <form onSubmit={handleSubmitForm}>
         <div className="grid gap-3">
           <Input

@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react";
-import { Alert, Button, Modal, Table } from "../../../components";
+import { Button, Modal, Table } from "../../../components";
 import { productService } from "../../../services";
 import { Question } from "../../../assets";
 import { FaEye, FaPen, FaTrash } from "react-icons/fa6";
@@ -11,17 +11,16 @@ import { setMessage } from "../../../redux/actions/message";
 import { setID } from "../../../redux/actions/id";
 import { TableColumn } from "../../../components/Table/Table";
 import { setLoading } from "../../../redux/actions/loading";
+import { setErrorMessage } from "../../../redux/actions/errorMessage";
 
 const Product: FC = () => {
   DocumentTitle("Produk");
   const products = useSelector((state: any) => state.products.products);
   const loading = useSelector((state: any) => state.loading.loading);
-  const message = useSelector((state: any) => state.message.message);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [loadingButton, setLoadingButton] = useState<boolean>(false);
   const [visible, setVisible] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string>("");
   const [id, setId] = useState<string>("");
 
   useEffect(() => {
@@ -120,7 +119,7 @@ const Product: FC = () => {
       setLoadingButton(false);
       setVisible(false);
     } catch (error: any) {
-      setErrorMessage(error.response.data.message);
+      dispatch(setErrorMessage([error.response.data.message]));
       setVisible(false);
       setLoadingButton(false);
     }
@@ -128,9 +127,6 @@ const Product: FC = () => {
 
   return (
     <>
-      <Alert type="success" hidden={message ? false : true}>
-        {message}
-      </Alert>
       <Modal
         visible={visible}
         onClose={() => setVisible(false)}
@@ -176,12 +172,6 @@ const Product: FC = () => {
         </div>
       </div>
       <div className="bg-white rounded-xl shadow p-4">
-        <Alert type="success" hidden={!message ? true : false}>
-          {message}
-        </Alert>
-        <Alert type="danger" hidden={!errorMessage ? true : false}>
-          {errorMessage}
-        </Alert>
         <Table
           data={products}
           columns={columns}

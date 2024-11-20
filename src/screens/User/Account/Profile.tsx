@@ -2,12 +2,12 @@ import { FC, useState } from "react";
 import { DocumentTitle } from "../../../layouts";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { A, Alert, Button, Input } from "../../../components";
+import { A, Button, Input } from "../../../components";
 import { userService } from "../../../services";
 import { useDispatch, useSelector } from "react-redux";
-import { defaultUser } from "../../../assets";
 import { updateMe } from "../../../redux/actions/me";
 import { me } from "../../../types/user";
+import { setMessage } from "../../../redux/actions/message";
 
 interface FormValues {
   name: string;
@@ -22,7 +22,6 @@ const Profile: FC = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [preview, setPreview] = useState<File | null>(null);
-  const [message, setMessage] = useState<string>("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
@@ -46,7 +45,7 @@ const Profile: FC = () => {
 
   const handleSubmit = async (values: FormValues) => {
     try {
-      setMessage("");
+      dispatch(setMessage(""));
       setLoading(true);
       const formData = {
         ...values,
@@ -54,7 +53,7 @@ const Profile: FC = () => {
       };
       const response = await userService.updateUser(formData as any);
       dispatch(updateMe(response.data.data.user));
-      setMessage(response.data.message);
+      dispatch(setMessage(response.data.message));
 
       setLoading(false);
     } catch (error: any) {
@@ -83,9 +82,6 @@ const Profile: FC = () => {
           mengamankan akun.
         </p>
       </div>
-      <Alert type="success" hidden={message ? false : true}>
-        {message}
-      </Alert>
       <form onSubmit={formik.handleSubmit} encType="multipart/form-data">
         <div className="grid md:grid-cols-3 pb-3">
           <div className="md:col-span-2 grid gap-3 order-3">
@@ -157,29 +153,14 @@ const Profile: FC = () => {
           </div>
           <div className="flex flex-col items-center justify-center gap-3 self-start pt-11 order-2 md:order-3 mb-5">
             <div className="w-1/3 aspect-square rounded-full overflow-hidden">
-              {me.image_url ? (
-                <img
-                  src={
-                    preview === null
-                      ? me.image_url
-                      : URL.createObjectURL(preview)
-                  }
-                  className="w-full"
-                  id="image_preview"
-                  alt="User Image"
-                />
-              ) : (
-                <img
-                  src={
-                    preview === null
-                      ? defaultUser
-                      : URL.createObjectURL(preview)
-                  }
-                  className="w-full"
-                  id="image_preview"
-                  alt="User Image"
-                />
-              )}
+              <img
+                src={
+                  preview === null ? me.image_url : URL.createObjectURL(preview)
+                }
+                className="w-full"
+                id="image_preview"
+                alt="User Image"
+              />
             </div>
             <div>
               <label htmlFor="image">

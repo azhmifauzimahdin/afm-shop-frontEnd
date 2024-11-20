@@ -1,11 +1,17 @@
 import { FC, useState } from "react";
-import { Alert, Button, Input } from "../../../components";
+import { Button, Input } from "../../../components";
 import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import YupPassword from "yup-password";
 import { adminService } from "../../../services";
 import { ChangePasswordRequest } from "../../../types/user";
+import { useDispatch } from "react-redux";
+import { setMessage } from "../../../redux/actions/message";
+import {
+  addErrorMessage,
+  setErrorMessage,
+} from "../../../redux/actions/errorMessage";
 YupPassword(Yup);
 
 interface FormValues {
@@ -16,8 +22,7 @@ interface FormValues {
 
 const ChangePassword: FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
-  const [message, setMessage] = useState<string>("");
-  const [errorMessage, setErrorMessage] = useState<any[]>([]);
+  const dispatch = useDispatch();
 
   const validationSchema = Yup.object().shape({
     old_password: Yup.string().required("Kata sandi lama wajib diisi"),
@@ -34,32 +39,23 @@ const ChangePassword: FC = () => {
   });
 
   const handleSubmit = async (values: FormValues) => {
-    setMessage("");
-    setErrorMessage([]);
+    dispatch(setMessage(""));
+    dispatch(setErrorMessage([]));
     try {
       setLoading(true);
-      console.log(values);
       const response = await adminService.changePassword(
         values as ChangePasswordRequest
       );
-      setMessage(response.data.message);
+      dispatch(setMessage(response.data.message));
       setLoading(false);
       formik.resetForm();
     } catch (error: any) {
-      console.log(error);
-      setErrorMessage([error.response.data.data?.errors]);
-      setErrorMessage((errorMessage: any) => [
-        ...errorMessage,
-        error.response.data.data?.old_password,
-      ]);
-      setErrorMessage((errorMessage: any) => [
-        ...errorMessage,
-        error.response.data.data?.password,
-      ]);
-      setErrorMessage((errorMessage: any) => [
-        ...errorMessage,
-        error.response.data.data?.password_confirmation,
-      ]);
+      dispatch(setErrorMessage([error.response.data.data?.errors]));
+      dispatch(addErrorMessage(error.response.data.data?.old_password));
+      dispatch(addErrorMessage(error.response.data.data?.password));
+      dispatch(
+        addErrorMessage(error.response.data.data?.password_confirmation)
+      );
       setLoading(false);
     }
   };
@@ -75,12 +71,6 @@ const ChangePassword: FC = () => {
   });
   return (
     <>
-      <Alert type="success" hidden={message ? false : true}>
-        {message}
-      </Alert>
-      <Alert type="danger" hidden={errorMessage.length > 0 ? false : true}>
-        {errorMessage}
-      </Alert>
       <div className="flex flex-col gap-1 md:flex-row md:justify-between md:items-center mb-4">
         <div className="font-medium text-2xl">Ganti Kata Sandi</div>
         <div className="text-xs md:text-sm">

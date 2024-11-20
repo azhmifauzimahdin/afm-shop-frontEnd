@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
 import { DocumentTitle } from "../../../../layouts";
-import { Alert, Button, Input } from "../../../../components";
+import { Button, Input } from "../../../../components";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -8,6 +8,10 @@ import { authAdminService } from "../../../../services";
 import { LoginRequest } from "../../../../types/login";
 import { useDispatch } from "react-redux";
 import { updateAdmin } from "../../../../redux/actions/admin";
+import {
+  addErrorMessage,
+  setErrorMessage,
+} from "../../../../redux/actions/errorMessage";
 
 interface FormValues {
   email: string;
@@ -17,13 +21,12 @@ interface FormValues {
 const Login: FC = () => {
   DocumentTitle("Login Admin");
   const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage]: any[] = useState([]);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handleSubmitForm = (e: any) => {
     e.preventDefault();
-    setErrorMessage([]);
+    dispatch(setErrorMessage([]));
     formik.handleSubmit();
   };
 
@@ -35,6 +38,7 @@ const Login: FC = () => {
   });
 
   const handleSubmit = async (values: FormValues) => {
+    dispatch(setErrorMessage([]));
     try {
       setLoading(true);
 
@@ -47,15 +51,9 @@ const Login: FC = () => {
       setLoading(false);
       navigate("/admin/dashboard");
     } catch (error: any) {
-      setErrorMessage([error.response.data.data?.errors]);
-      setErrorMessage((errorMessage: any) => [
-        ...errorMessage,
-        error.response.data.data?.email,
-      ]);
-      setErrorMessage((errorMessage: any) => [
-        ...errorMessage,
-        error.response.data.data?.password,
-      ]);
+      dispatch(setErrorMessage([error.response.data.data?.errors]));
+      dispatch(addErrorMessage(error.response.data.data?.email));
+      dispatch(addErrorMessage(error.response.data.data?.password));
       setLoading(false);
       formik.resetForm();
     }
@@ -73,9 +71,6 @@ const Login: FC = () => {
   return (
     <>
       <h1 className="text-center text-2xl font-bold mb-3">LOGIN ADMIN</h1>
-      <Alert type="danger" hidden={errorMessage.length > 0 ? false : true}>
-        {errorMessage}
-      </Alert>
       <form onSubmit={handleSubmitForm}>
         <div className="grid gap-3">
           <Input

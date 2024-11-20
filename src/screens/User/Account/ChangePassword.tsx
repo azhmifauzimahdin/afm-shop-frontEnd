@@ -2,12 +2,17 @@ import { FC, useState } from "react";
 import { DocumentTitle } from "../../../layouts";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { Alert, Button, Input } from "../../../components";
+import { Button, Input } from "../../../components";
 import { userService } from "../../../services";
 import { ChangePasswordRequest } from "../../../types/user";
 import { useDispatch } from "react-redux";
 import { updateUser } from "../../../redux/actions/user";
 import YupPassword from "yup-password";
+import { setMessage } from "../../../redux/actions/message";
+import {
+  addErrorMessage,
+  setErrorMessage,
+} from "../../../redux/actions/errorMessage";
 YupPassword(Yup);
 
 interface FormValues {
@@ -19,8 +24,6 @@ interface FormValues {
 const ChangePassword: FC = () => {
   DocumentTitle("Ganti Kata Sandi");
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
-  const [errorMessage, setErrorMessage]: any[] = useState([]);
   const dispatch = useDispatch();
 
   const validationSchema = Yup.object().shape({
@@ -38,31 +41,26 @@ const ChangePassword: FC = () => {
   });
 
   const handleSubmit = async (values: FormValues) => {
-    setMessage("");
-    setErrorMessage([]);
+    dispatch(setMessage(""));
+    dispatch(setErrorMessage([]));
     try {
       setLoading(true);
       const response = await userService.changePassword(
         values as ChangePasswordRequest
       );
       dispatch(updateUser(response.data.data));
-      setMessage(response.data.message);
+      dispatch(setMessage(response.data.message));
       setLoading(false);
       formik.resetForm();
     } catch (error: any) {
-      setErrorMessage([error.response.data.data?.errors]);
-      setErrorMessage((errorMessage: any) => [
-        ...errorMessage,
-        error.response.data.data?.old_password,
-      ]);
-      setErrorMessage((errorMessage: any) => [
-        ...errorMessage,
-        error.response.data.data?.password,
-      ]);
-      setErrorMessage((errorMessage: any) => [
-        ...errorMessage,
-        error.response.data.data?.password_confirmation,
-      ]);
+      console.log("error : ", error);
+
+      dispatch(setErrorMessage([error.response.data.data?.errors]));
+      dispatch(addErrorMessage(error.response.data.data?.old_password));
+      dispatch(addErrorMessage(error.response.data.data?.password));
+      dispatch(
+        addErrorMessage(error.response.data.data?.password_confirmation)
+      );
       setLoading(false);
     }
   };
@@ -86,12 +84,6 @@ const ChangePassword: FC = () => {
           mengamankan akun.
         </p>
       </div>
-      <Alert type="success" hidden={message ? false : true}>
-        {message}
-      </Alert>
-      <Alert type="danger" hidden={errorMessage.length > 0 ? false : true}>
-        {errorMessage}
-      </Alert>
       <form onSubmit={formik.handleSubmit}>
         <div className="grid gap-3 w-full md:w-6/12">
           <Input

@@ -2,12 +2,16 @@ import { FC, useState } from "react";
 import { DocumentTitle } from "../../../layouts";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { Alert, Button, Input } from "../../../components";
+import { Button, Input } from "../../../components";
 import { userService } from "../../../services";
 import { UserEmailRequest } from "../../../types/user";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { updateUser } from "../../../redux/actions/user";
+import {
+  addErrorMessage,
+  setErrorMessage,
+} from "../../../redux/actions/errorMessage";
 
 interface FormValues {
   email: string;
@@ -17,7 +21,6 @@ const Email: FC = () => {
   DocumentTitle("Edit Email");
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(false);
   const dispatch = useDispatch();
 
   const validationSchema = Yup.object().shape({
@@ -27,6 +30,7 @@ const Email: FC = () => {
   });
 
   const handleSubmit = async (values: FormValues) => {
+    dispatch(setErrorMessage([]));
     try {
       setLoading(true);
       const response = await userService.updateEmail(
@@ -36,9 +40,7 @@ const Email: FC = () => {
       setLoading(false);
       navigate("/account/profile/verification-code");
     } catch (error: any) {
-      console.log(error);
-
-      setErrorMessage(error.response.data.data?.email);
+      dispatch(addErrorMessage(error.response.data.data?.email));
       setLoading(false);
     }
   };
@@ -60,9 +62,6 @@ const Email: FC = () => {
           mengamankan akun.
         </p>
       </div>
-      <Alert type="danger" hidden={errorMessage ? false : true}>
-        {errorMessage}
-      </Alert>
       <form onSubmit={formik.handleSubmit}>
         <div className="grid gap-3 w-full md:w-2/3">
           <Input

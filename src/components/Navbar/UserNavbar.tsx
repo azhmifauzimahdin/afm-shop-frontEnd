@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { defaultUser, LogoFull } from "../../assets";
+import { LogoFull } from "../../assets";
 import { FaArrowLeft, FaBars } from "react-icons/fa";
 import { authService, productService } from "../../services";
 import { useDispatch, useSelector } from "react-redux";
@@ -55,7 +55,7 @@ const UserNavbar: FC = () => {
   };
 
   return (
-    <div className="fixed top-0 z-50 w-full bg-white shadow">
+    <div className="fixed top-0 z-40 w-full bg-white shadow">
       <nav
         id="main-navbar"
         className="container mx-auto p-3 lg:px-20 flex items-center gap-6 md:gap-10 transition-all duration-500"
@@ -99,19 +99,11 @@ const UserNavbar: FC = () => {
                 className="flex items-center gap-3 p-1 rounded-3xl hover:bg-slate-100 cursor-pointer relative z-50"
               >
                 <div className="h-8 aspect-square rounded-full mx-auto overflow-hidden">
-                  {me.image_url ? (
-                    <ProgressiveImg
-                      src={me.image_url}
-                      className="w-full"
-                      alt="User Image"
-                    />
-                  ) : (
-                    <ProgressiveImg
-                      src={defaultUser}
-                      className="w-full"
-                      alt="User Image"
-                    />
-                  )}
+                  <ProgressiveImg
+                    src={me.image_url}
+                    className="w-full"
+                    alt="User Image"
+                  />
                 </div>
                 <h1 className="w-28 truncate">{me.name}</h1>
                 <div
@@ -125,19 +117,11 @@ const UserNavbar: FC = () => {
                   <div className="grid gap-2 w-auto text-nowrap p-3">
                     <div className="flex items-center gap-3 border-b pb-3 border-b-slate-300">
                       <div className="h-10 aspect-square rounded-full mx-auto overflow-hidden">
-                        {me.image_url ? (
-                          <ProgressiveImg
-                            src={me.image_url}
-                            className="w-full"
-                            alt="User Image"
-                          />
-                        ) : (
-                          <ProgressiveImg
-                            src={defaultUser}
-                            className="w-full"
-                            alt="User Image"
-                          />
-                        )}
+                        <ProgressiveImg
+                          src={me.image_url}
+                          className="w-full"
+                          alt="User Image"
+                        />
                       </div>
                       <div>
                         <h1 className="w-44 truncate font-medium">{me.name}</h1>

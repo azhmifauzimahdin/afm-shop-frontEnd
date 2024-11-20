@@ -1,5 +1,5 @@
 const initialState = {
-  message: "",
+  errorMessage: [],
 };
 
 const reducer = (
@@ -9,10 +9,15 @@ const reducer = (
   const { type, payload } = action;
 
   switch (type) {
-    case "SETMESSAGE":
+    case "SETERRORMESSAGE":
       return {
         ...state,
-        message: payload,
+        errorMessage: payload,
+      };
+    case "ADDERRORMESSAGE":
+      return {
+        ...state,
+        errorMessage: [payload, ...state.errorMessage],
       };
     default:
       return {

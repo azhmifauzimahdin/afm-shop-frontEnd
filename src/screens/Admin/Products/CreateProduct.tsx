@@ -1,7 +1,6 @@
 import { FC, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
-  Alert,
   Button,
   Input,
   InputEditor,
@@ -17,6 +16,7 @@ import { useDispatch } from "react-redux";
 import { setMessage } from "../../../redux/actions/message";
 import { addProduct } from "../../../redux/actions/product";
 import { FaPercent, FaRupiahSign } from "react-icons/fa6";
+import { setErrorMessage } from "../../../redux/actions/errorMessage";
 
 interface FormValues {
   title: string;
@@ -29,7 +29,6 @@ interface FormValues {
 const CreateProduct: FC = () => {
   DocumentTitle("Tambah Produk");
   const [loading, setLoading] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string>("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -69,7 +68,7 @@ const CreateProduct: FC = () => {
   });
 
   const handleSubmit = async (values: FormValues) => {
-    setErrorMessage("");
+    dispatch(setErrorMessage([]));
     try {
       dispatch(setMessage(""));
       setLoading(true);
@@ -82,7 +81,7 @@ const CreateProduct: FC = () => {
       navigate("/admin/products");
     } catch (error: any) {
       setLoading(false);
-      setErrorMessage("Terjadi kesalahan");
+      dispatch(setErrorMessage(["Terjadi kesalahan"]));
       console.log(error);
     }
   };
@@ -101,9 +100,6 @@ const CreateProduct: FC = () => {
 
   return (
     <>
-      <Alert type="danger" hidden={errorMessage ? false : true}>
-        {errorMessage}
-      </Alert>
       <div className="flex flex-col gap-1 md:flex-row md:justify-between md:items-center mb-4">
         <div className="font-medium text-2xl">Tambah Produk</div>
         <div className="text-xs md:text-sm">

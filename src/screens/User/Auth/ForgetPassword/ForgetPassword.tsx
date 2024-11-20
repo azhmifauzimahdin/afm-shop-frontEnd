@@ -55,11 +55,7 @@ const ForgetPassword: FC = () => {
       <h1 className="text-center text-2xl font-bold mb-1">
         Atur Ulang Kata Sandi
       </h1>
-      <Alert
-        type="danger"
-        hidden={errorMessage ? false : true}
-        className="text-center my-3"
-      >
+      <Alert type="danger" hidden={errorMessage ? false : true}>
         {errorMessage}
       </Alert>
       <p className="mb-3 text-slate-500 text-center">
