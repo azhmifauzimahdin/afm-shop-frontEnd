@@ -3,7 +3,7 @@ import Skeleton from "react-loading-skeleton";
 
 interface InputProps {
   label?: string;
-  type: "search" | "number";
+  type: "search" | "number" | "text";
   id: string;
   name: string;
   prepend?: ReactNode;

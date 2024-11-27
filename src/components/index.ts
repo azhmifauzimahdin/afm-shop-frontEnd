@@ -22,3 +22,6 @@ export { default as Rating } from "./Rating/Rating";
 export { default as ProgressBar } from "./ProgressBar/ProgressBar";
 export { default as Review } from "./Review/Review";
 export { default as ReviewList } from "./Review/ReviewList";
+export { default as ChatBox } from "./Chat/ChatBox";
+export { default as ChatList } from "./Chat/ChatList";
+export { default as Chat } from "./Chat/Chat";

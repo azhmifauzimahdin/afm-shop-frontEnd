@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { DocumentTitle } from "../../../../layouts";
 import { Button, Input, A } from "../../../../components";
 import { useNavigate } from "react-router-dom";
@@ -26,6 +26,10 @@ const Login: FC = () => {
   const navigate = useNavigate();
   const me = useSelector((state: any) => state.me.me);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(setErrorMessage([]));
+  }, []);
 
   const handleSubmitForm = (e: any) => {
     e.preventDefault();

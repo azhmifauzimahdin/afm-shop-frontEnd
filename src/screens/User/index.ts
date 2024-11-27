@@ -11,3 +11,4 @@ export { default as VerificationCodeChangeEmail } from "./Account/VerificationCo
 export { default as ChangePassword } from "./Account/ChangePassword";
 export { default as Home } from "./Home";
 export { default as ShowProduct } from "./Products/ShowProduct";
+export { default as Chat } from "./Chat/Chat";

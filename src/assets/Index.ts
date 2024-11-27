@@ -7,3 +7,4 @@ export { default as NotFound } from "./img/NotFound.png";
 export { default as logoGoogle } from "./svg/google.svg";
 export { default as Question } from "./img/question.png";
 export { default as BlankImage } from "./img/Blank.png";
+export { default as ChatImage } from "./img/chat.png";

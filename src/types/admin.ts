@@ -2,7 +2,7 @@ export interface Admin {
   id: string;
   name: string;
   email: string;
-  image: string;
+  image_url: string;
 }
 
 export interface AdminResponse {

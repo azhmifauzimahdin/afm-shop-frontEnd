@@ -79,20 +79,23 @@ const UserNavbar: FC = () => {
             prepend={<FaMagnifyingGlass className="text-lg text-slate-500" />}
           />
         </form>
-        <div className="flex items-center gap-1 relative">
-          <Link to="" className="p-2 rounded-3xl hover:bg-slate-100 text-lg">
-            <GoCommentDiscussion className="text-xl" />
-          </Link>
-          <Link to="" className="p-2 rounded-3xl hover:bg-slate-100 text-lg">
-            <PiShoppingBag className="text-xl" />
-          </Link>
-          <div
-            className={`hidden md:flex gap-2 ${
-              location == "account" && "md:hidden"
-            }`}
-          >
-            <div className="my-2 border border-slate-400 mx-2"></div>
-            {me.email ? (
+        {me.email ? (
+          <div className="flex items-center gap-1 relative">
+            <Link
+              to="/chat"
+              className="p-2 rounded-3xl hover:bg-slate-100 text-lg"
+            >
+              <GoCommentDiscussion className="text-xl" />
+            </Link>
+            <Link to="" className="p-2 rounded-3xl hover:bg-slate-100 text-lg">
+              <PiShoppingBag className="text-xl" />
+            </Link>
+            <div
+              className={`hidden md:flex gap-2 ${
+                location == "account" && "md:hidden"
+              }`}
+            >
+              <div className="my-2 border border-slate-400 mx-2"></div>
               <div
                 onMouseEnter={() => setToggle(true)}
                 onMouseLeave={() => setToggle(false)}
@@ -145,32 +148,32 @@ const UserNavbar: FC = () => {
                   </div>
                 </div>
               </div>
-            ) : (
-              <>
-                <Button
-                  type="button"
-                  color="outline-primary"
-                  onClick={() => navigate("/login")}
-                >
-                  Masuk
-                </Button>
-                <Button
-                  type="button"
-                  color="primary"
-                  onClick={() => navigate("register")}
-                >
-                  Daftar
-                </Button>
-              </>
-            )}
+            </div>
+            <div
+              className="md:hidden cursor-pointer rounded-3xl hover:bg-slate-100 p-2"
+              onClick={() => setToggleMobile(true)}
+            >
+              <FaBars />
+            </div>
           </div>
-          <div
-            className="md:hidden cursor-pointer rounded-3xl hover:bg-slate-100 p-2"
-            onClick={() => setToggleMobile(true)}
-          >
-            <FaBars />
+        ) : (
+          <div className="flex gap-3">
+            <Button
+              type="button"
+              color="outline-primary"
+              onClick={() => navigate("/login")}
+            >
+              Masuk
+            </Button>
+            <Button
+              type="button"
+              color="primary"
+              onClick={() => navigate("register")}
+            >
+              Daftar
+            </Button>
           </div>
-        </div>
+        )}
       </nav>
       <nav
         className={`absolute top-0 w-full bg-white z-50 overflow-hidden transition-all duration-500 ${

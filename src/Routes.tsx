@@ -2,6 +2,7 @@ import { FC } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import {
   ChangePassword as ChangePasswordUser,
+  Chat as ChatUser,
   CreateAccount,
   Email,
   ForgetPassword,
@@ -28,6 +29,7 @@ import {
 import {
   AdminLogin,
   ChangePassword,
+  Chat,
   CreateProduct,
   EditProduct,
   Product,
@@ -86,6 +88,7 @@ const Router: FC = () => {
                   element={<ChangePasswordUser />}
                 />
               </Route>
+              <Route path="/chat" element={<ChatUser />} />
             </Route>
           </Route>
           <Route
@@ -127,6 +130,7 @@ const Router: FC = () => {
                 path="/admin/change-password"
                 element={<ChangePassword />}
               />
+              <Route path="/admin/chat" element={<Chat />} />
             </Route>
           </Route>
         </Route>

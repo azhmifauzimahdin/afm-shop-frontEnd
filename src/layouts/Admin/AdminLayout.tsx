@@ -1,6 +1,6 @@
 import { FC, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { defaultUser, LogoFull } from "../../assets";
+import { LogoFull } from "../../assets";
 import { CiLock, CiLogout, CiShop, CiUser } from "react-icons/ci";
 import { Alert, NavLink, ProgressiveImg } from "../../components";
 import { useClickOutside } from "../../hooks/useClickOutside";
@@ -11,13 +11,13 @@ import { deleteAdmin } from "../../redux/actions/admin";
 import { MdOutlineDashboard } from "react-icons/md";
 import { setLoading } from "../../redux/actions/loading";
 import { setProduct } from "../../redux/actions/product";
+import { LiaComment } from "react-icons/lia";
 
 const AdminLayout: FC = () => {
   const me = useSelector((state: any) => state.admin.admin);
   const [toggleNavbar, setToggleNavbar] = useState<boolean>(false);
   const [toggleSidebar, setToggleSidebar] = useState<boolean>(false);
   const refNavbar = useRef<HTMLDivElement>(null);
-  const refSidebar = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation().pathname.split("/")[2];
@@ -27,7 +27,10 @@ const AdminLayout: FC = () => {
   );
 
   useClickOutside(refNavbar, () => setToggleNavbar(false));
-  useClickOutside(refSidebar, () => setToggleSidebar(false));
+
+  const handleCloseSidebar = () => {
+    if (toggleSidebar) setToggleSidebar(false);
+  };
 
   const handleLogout = async () => {
     try {
@@ -54,7 +57,6 @@ const AdminLayout: FC = () => {
             <div className="flex items-center justify-between">
               <div className="flex items-center justify-start rtl:justify-end">
                 <div
-                  ref={refSidebar}
                   className="inline-flex items-center p-1.5 rounded-lg sm:hidden cursor-pointer hover:bg-white text-xl text-slate-700 hover:text-slate-600"
                   onClick={() => setToggleSidebar(!toggleSidebar)}
                 >
@@ -73,19 +75,11 @@ const AdminLayout: FC = () => {
                   className="flex items-center gap-3 p-1 rounded-lg md:hover:bg-slate-100 hover:text-slate-900 cursor-pointer relative z-50 transition-all"
                 >
                   <div className="h-8 aspect-square rounded-full mx-auto overflow-hidden">
-                    {me.image ? (
-                      <ProgressiveImg
-                        src={me.image}
-                        className="w-full"
-                        alt="User Image"
-                      />
-                    ) : (
-                      <ProgressiveImg
-                        src={defaultUser}
-                        className="w-full"
-                        alt="User Image"
-                      />
-                    )}
+                    <ProgressiveImg
+                      src={me.image_url}
+                      className="w-full"
+                      alt="User Image"
+                    />
                   </div>
                   <h1 className="w-28 truncate hidden md:block">{me.name}</h1>
                   <div
@@ -99,19 +93,11 @@ const AdminLayout: FC = () => {
                     <div className="grid gap-2 w-auto text-nowrap p-4">
                       <div className="flex items-center gap-3 border-b pb-3 border-b-slate-300">
                         <div className="h-10 aspect-square rounded-full mx-auto overflow-hidden">
-                          {me.image ? (
-                            <ProgressiveImg
-                              src={me.image}
-                              className="w-full"
-                              alt="User Image"
-                            />
-                          ) : (
-                            <ProgressiveImg
-                              src={defaultUser}
-                              className="w-full"
-                              alt="User Image"
-                            />
-                          )}
+                          <ProgressiveImg
+                            src={me.image_url}
+                            className="w-full"
+                            alt="User Image"
+                          />
                         </div>
                         <div>
                           <h1 className="w-44 truncate font-medium">
@@ -142,7 +128,6 @@ const AdminLayout: FC = () => {
 
         <aside
           id="logo-sidebar"
-          ref={refSidebar}
           className={`fixed top-14 pt-3 left-0 z-30 w-64 h-screen transition-transform duration-700 -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 ${
             toggleSidebar ? "transform-none" : "-translate-x-full"
           }`}
@@ -186,6 +171,17 @@ const AdminLayout: FC = () => {
               </li>
               <li>
                 <NavLink
+                  to="/admin/chat"
+                  type="admin"
+                  active={location === "chat"}
+                  onClick={() => setToggleSidebar(false)}
+                >
+                  <LiaComment className="text-lg font-thin" />
+                  Chat
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
                   to="/admin/change-password"
                   type="admin"
                   active={location === "change-password"}
@@ -199,7 +195,10 @@ const AdminLayout: FC = () => {
           </div>
         </aside>
 
-        <div className="p-3 sm:ml-64 pt-16 ">
+        <div
+          className="p-3 sm:ml-64 pt-16 min-h-screen "
+          onClick={handleCloseSidebar}
+        >
           <Outlet />
         </div>
       </div>
