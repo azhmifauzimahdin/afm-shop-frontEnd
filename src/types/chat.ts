@@ -21,7 +21,7 @@ export interface SendChatResponse {
 
 export interface Message {
   id: string;
-  messages: [any | Chat];
+  messages: Chat[];
   user: User;
   admin: Admin;
   read_user: number;
@@ -30,7 +30,6 @@ export interface Message {
 
 export interface Chat {
   id: string;
-  chat_id: string;
   message: string;
   status: number;
   sent_by: string;

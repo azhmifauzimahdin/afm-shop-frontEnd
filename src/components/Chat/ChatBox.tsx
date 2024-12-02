@@ -1,6 +1,6 @@
 import { FC, useEffect, useRef, useState } from "react";
 
-import { FaMagnifyingGlass } from "react-icons/fa6";
+// import { FaMagnifyingGlass } from "react-icons/fa6";
 import Skeleton from "react-loading-skeleton";
 import { VscSend } from "react-icons/vsc";
 import InputGroup from "../Forms/InputGroup";
@@ -9,68 +9,64 @@ import ProgressiveImg from "../Image/ProgressiveImg";
 import Chat from "./Chat";
 import { ChatImage } from "../../assets";
 import { Chat as ChatType, Message } from "../../types/chat";
+import moment from "moment";
+import "moment/dist/locale/id";
 
 interface InputProps {
   data: Message[];
-  newData?: Message[];
   role: "admin" | "user";
-  handleReadMessage: (userId: string) => any;
+  handleOpenMessage: (userId: string) => any;
   handleSubmit: (userId: string, message: string) => any;
-  newMessage: ChatType | undefined;
   loadingRender: boolean;
 }
 
 const ChatBox: FC<InputProps> = (props) => {
-  const {
-    data,
-    role,
-    handleReadMessage,
-    handleSubmit,
-    newMessage,
-    loadingRender,
-  } = props;
-  const [dataMessage, setDataMessage] = useState<Message[]>([]);
-  const [detailMessage, setDetailMessage] = useState<Message>();
-  const [messageId, setMessageId] = useState<string>("");
-  const [userId, setUserId] = useState<string>("");
-  const [chats, setChats] = useState<ChatType[]>([]);
+  const { data, role, handleOpenMessage, handleSubmit, loadingRender } = props;
+  const [dataMessages, setDataMessages] = useState<Message[]>([]);
+  const [currentIndex, setCurrentIndex] = useState<number>(-1);
   const [message, setMessage] = useState<string>("");
 
   useEffect(() => {
-    initialData(data);
-    if (messageId) {
-      handleRefeshChat(messageId);
-      handleReadMessage(userId);
+    if (currentIndex !== -1) {
+      if (
+        dataMessages[currentIndex].messages.length <=
+        data[currentIndex].messages.length
+      ) {
+        setDataMessages(data);
+      }
+
+      if (
+        dataMessages[currentIndex].messages.length <
+        data[currentIndex].messages.length
+      ) {
+        if (role === "user") dataMessages[currentIndex].read_user = 0;
+        dataMessages[currentIndex].read_admin = 0;
+        const userId =
+          role === "user"
+            ? dataMessages[currentIndex].admin.id
+            : dataMessages[currentIndex].user.id;
+        handleOpenMessage(userId);
+      }
+    } else {
+      setDataMessages(data);
     }
   }, [data]);
 
-  useEffect(() => {
-    if (!newMessage) return;
-    setChats([...chats, newMessage]);
-  }, [newMessage]);
-
-  const initialData = (data: Message[]) => {
-    setDataMessage(data);
-  };
-
-  const handleRefeshChat = (messageId: string) => {
-    const message = dataMessage.filter((data) => data.id === messageId);
-    setChats(message ? message[0].messages : []);
-    setDetailMessage(message ? message[0] : undefined);
-  };
-
-  const handleShowChat = (messageId: string, userId: string) => {
-    setMessageId(messageId);
-    setUserId(userId);
-    handleReadMessage(userId);
-    const readChat = dataMessage.map((data) =>
-      data.id === messageId ? { ...data, read_admin: 0, read_user: 0 } : data
-    );
-    initialData(readChat);
-
-    const message = dataMessage.filter((data) => data.id === messageId);
-    setDetailMessage(message ? message[0] : undefined);
-    setChats(message ? message[0].messages : []);
+  const addNewMessage = (message: string) => {
+    const now = moment();
+    const newMessage: ChatType = {
+      id: `123`,
+      message: message,
+      status: 0,
+      sent_by: role,
+      created_at: `${now}`,
+      date: `${now.format("D MMM YYYY")}`,
+      time: `${now.format("HH:mm")}`,
+    };
+    dataMessages[currentIndex].messages = [
+      ...dataMessages[currentIndex].messages,
+      newMessage,
+    ];
   };
 
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
@@ -78,7 +74,7 @@ const ChatBox: FC<InputProps> = (props) => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
     }
-  }, [chats]);
+  }, [dataMessages[currentIndex]?.messages.length]);
 
   return (
     <div
@@ -92,7 +88,7 @@ const ChatBox: FC<InputProps> = (props) => {
       >
         <div className="col-span-2 p-3 md:p-5 border-r border-slate-300 overflow-hidden">
           <h1 className="section_title text-xl font-medium mb-5">Pesan</h1>
-          <form className="mb-3">
+          {/* <form className="mb-3">
             <InputGroup
               type="search"
               id="search"
@@ -100,7 +96,7 @@ const ChatBox: FC<InputProps> = (props) => {
               placeholder="Cari pesan disini"
               prepend={<FaMagnifyingGlass className="text-lg text-slate-500" />}
             />
-          </form>
+          </form> */}
           <div className="flex flex-col gap-3">
             {loadingRender ? (
               <>
@@ -117,33 +113,46 @@ const ChatBox: FC<InputProps> = (props) => {
                 ))}
               </>
             ) : (
-              dataMessage.map((data, index) => (
-                <ChatList
-                  data={data}
-                  role={role}
-                  key={index}
-                  onClick={(messageId: string, userId: string) =>
-                    handleShowChat(messageId, userId)
-                  }
-                />
-              ))
+              dataMessages.map((data, index) => {
+                if (currentIndex !== -1) {
+                  if (role === "user") dataMessages[currentIndex].read_user = 0;
+                  dataMessages[currentIndex].read_admin = 0;
+                }
+                return (
+                  <ChatList
+                    data={data}
+                    role={role}
+                    key={index}
+                    onClick={() => {
+                      const userId =
+                        role === "user"
+                          ? dataMessages[index].admin.id
+                          : dataMessages[index].user.id;
+                      if (role === "user") dataMessages[index].read_user = 0;
+                      dataMessages[index].read_admin = 0;
+                      handleOpenMessage(userId);
+                      setCurrentIndex(index);
+                    }}
+                  />
+                );
+              })
             )}
           </div>
         </div>
         <div
           className={`col-span-4 ${
-            detailMessage ? "bg-slate-100" : ""
+            currentIndex >= 0 ? "bg-slate-100" : ""
           } relative `}
         >
-          {detailMessage ? (
+          {currentIndex >= 0 ? (
             <>
               <div className="absolute top-0 left-0 w-full flex items-center gap-3 py-2 px-3 bg-white">
                 <div className="h-10 w-10 rounded-full overflow-hidden">
                   <ProgressiveImg
                     src={
                       role === "user"
-                        ? detailMessage.admin.image_url
-                        : detailMessage.user.image_url
+                        ? dataMessages[currentIndex].admin.image_url
+                        : dataMessages[currentIndex].user.image_url
                     }
                     className="w-full"
                     alt="User Image"
@@ -152,8 +161,8 @@ const ChatBox: FC<InputProps> = (props) => {
                 <div>
                   <h1 className="font-medium">
                     {role === "user"
-                      ? detailMessage.admin.name
-                      : detailMessage.user.name}
+                      ? dataMessages[currentIndex].admin.name
+                      : dataMessages[currentIndex].user.name}
                   </h1>
                   <p className="text-xs">
                     Aktif 10 manit yang lalu############
@@ -164,8 +173,9 @@ const ChatBox: FC<InputProps> = (props) => {
                 className="h-[78vh] pt-[64px] pb-[62px] overflow-auto hd-scroll"
                 ref={messagesEndRef}
               >
-                {chats.map((data, index) => {
-                  const prevItem = chats[index - 1];
+                {dataMessages[currentIndex].messages.map((data, index) => {
+                  const prevItem =
+                    dataMessages[currentIndex].messages[index - 1];
 
                   const isSameAsPrev =
                     prevItem?.date === data.date ? true : false;
@@ -193,8 +203,9 @@ const ChatBox: FC<InputProps> = (props) => {
                   e.preventDefault();
                   const userId =
                     role === "user"
-                      ? detailMessage.admin.id
-                      : detailMessage.user.id;
+                      ? dataMessages[currentIndex].admin.id
+                      : dataMessages[currentIndex].user.id;
+                  addNewMessage(message);
                   handleSubmit(userId, message);
                   setMessage("");
                 }}

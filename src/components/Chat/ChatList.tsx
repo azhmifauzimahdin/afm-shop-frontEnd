@@ -5,24 +5,24 @@ import ProgressiveImg from "../Image/ProgressiveImg";
 interface InputProps {
   data: Message;
   role: "admin" | "user";
-  onClick: (messageId: string, userId: string) => any;
+  onClick: () => any;
 }
 const ChatList: FC<InputProps> = (props) => {
   const { data, role, onClick } = props;
   const readChat = role === "user" ? data.read_user : data.read_admin;
   return (
     <div
-      onClick={() =>
-        onClick(data.id, role === "user" ? data.admin.id : data.user.id)
-      }
+      onClick={onClick}
       className="flex items-center gap-3 rounded-lg cursor-pointer overflow-hidden hover:bg-slate-100"
     >
-      <div className="h-10 w-10 rounded-full overflow-hidden">
-        <ProgressiveImg
-          src={role === "user" ? data.admin.image_url : data.user.image_url}
-          className="w-full"
-          alt="User image"
-        />
+      <div>
+        <div className="h-10 w-10 rounded-full overflow-hidden">
+          <ProgressiveImg
+            src={role === "user" ? data.admin.image_url : data.user.image_url}
+            className="w-full"
+            alt="User image"
+          />
+        </div>
       </div>
       <div className="grow flex flex-col justify-center py-2 pe-2 border-b h-full">
         <div className="flex justify-between items-center">
@@ -34,7 +34,7 @@ const ChatList: FC<InputProps> = (props) => {
           </div>
         </div>
         <div className="flex justify-between text-xs">
-          <div className="truncate grow">
+          <div className="truncate">
             {data.messages[data.messages.length - 1].message}
           </div>
           {readChat > 0 ? (

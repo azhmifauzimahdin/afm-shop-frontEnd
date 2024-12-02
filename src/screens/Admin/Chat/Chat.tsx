@@ -1,15 +1,14 @@
 import { FC, useEffect, useState } from "react";
 import { ChatBox } from "../../../components";
 import { DocumentTitle } from "../../../layouts";
-import { Chat as ChatType, Message } from "../../../types/chat";
+import { Message } from "../../../types/chat";
 import { chatAdminService } from "../../../services";
 import { useDispatch } from "react-redux";
 import { setErrorMessage } from "../../../redux/actions/errorMessage";
 
 const Chat: FC = () => {
   DocumentTitle("Pesan");
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [newMessage, setNewMessage] = useState<ChatType>();
+  const [dataMessages, setDataMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const dispatch = useDispatch();
 
@@ -29,7 +28,7 @@ const Chat: FC = () => {
     dispatch(setErrorMessage([]));
     try {
       const response = await chatAdminService.getAll();
-      setMessages(response.data.data.messages);
+      setDataMessages(response.data.data.messages);
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -42,7 +41,7 @@ const Chat: FC = () => {
     dispatch(setErrorMessage([]));
     try {
       const response = await chatAdminService.getAll();
-      setMessages(response.data.data.messages);
+      setDataMessages(response.data.data.messages);
     } catch (error) {
       console.log(error);
       dispatch(setErrorMessage(["Terjadi Kesalahan"]));
@@ -51,7 +50,9 @@ const Chat: FC = () => {
 
   const handleReadMessage = async (userId: string) => {
     try {
+      console.log("mulai");
       await chatAdminService.readChat(userId);
+      console.log("selesai");
     } catch (error) {
       console.log(error);
       dispatch(setErrorMessage(["Terjadi kesalahan"]));
@@ -62,8 +63,8 @@ const Chat: FC = () => {
   const handleSubmit = async (userId: string, message: string) => {
     dispatch(setErrorMessage([]));
     try {
-      const response = await chatAdminService.sendChat(userId, message);
-      setNewMessage(response.data.data.messages);
+      await chatAdminService.sendChat(userId, message);
+      getNewMessages();
     } catch (error) {
       console.log(error);
       dispatch(setErrorMessage(["Terjadi kesalahan"]));
@@ -72,12 +73,11 @@ const Chat: FC = () => {
 
   return (
     <ChatBox
-      data={messages}
-      handleReadMessage={(userId: string) => handleReadMessage(userId)}
+      data={dataMessages}
+      handleOpenMessage={(userId: string) => handleReadMessage(userId)}
       handleSubmit={(userId: string, message: string) =>
         handleSubmit(userId, message)
       }
-      newMessage={newMessage}
       loadingRender={loading}
       role="admin"
     />
